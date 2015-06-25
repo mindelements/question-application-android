@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Question Tool"
+        android:onClick="getQuestionView"
         android:id="@+id/questionButton"
         android:layout_alignParentTop="true"
         android:textAllCaps="false"
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="Quiz Tool"
         android:id="@+id/quizButton"
+        android:onClick="getQuizView"
         android:layout_below="@+id/questionButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -54,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Copyright © 2015"
-            android:textColor="#000"
+            android:textColor="#16A085"
             android:textSize="20sp" />
     </RelativeLayout>
 
