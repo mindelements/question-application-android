@@ -8,14 +8,12 @@
 
     <Button
         android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:text="Question Tool"
-        android:textColor="#F5FBFF"
         android:onClick="getQuestionView"
         android:id="@+id/questionButton"
         android:textAllCaps="false"
         android:layout_marginTop="48dp"
-        android:background="@drawable/buttonshape"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -23,14 +21,12 @@
 
     <Button
         android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:textColor="#F5FBFF"
+        android:layout_height="wrap_content"
         android:text="Quiz Tool"
         android:paddingBottom="10dp"
         android:id="@+id/quizButton"
         android:onClick="getQuizView"
         android:textAllCaps="false"
-        android:background="@drawable/buttonshape"
         android:layout_below="@+id/questionButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -49,28 +45,6 @@
         android:textSize="15dp"
         android:textStyle="bold"
         android:textColor="#0000CD"/>
-
-    <RelativeLayout
-        android:id="@+id/footer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#06468E"
-        android:gravity="center"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Copyright © 2015"
-            android:textColor="#16A085"
-            android:textSize="20sp"
-            />
-    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -94,6 +68,27 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"/>
 
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#06468E"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Copyright © 2015"
+            android:textColor="#16A085"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
 </RelativeLayout>
 
 

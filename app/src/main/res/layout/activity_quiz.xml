@@ -7,4 +7,30 @@
     tools:context="com.suresh.mindelements.QuizActivity">
 
 
+
+
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#06468E"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Copyright © 2015"
+            android:textColor="#16A085"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
+
+
 </RelativeLayout>

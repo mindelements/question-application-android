@@ -144,11 +144,9 @@ public class FileDialog {
                         boolean endsWith = fileEndsWith != null ? filename
                                 .toLowerCase().endsWith(fileEndsWith) : true;
                         if (filename.toLowerCase().endsWith(
-                                ".PNG".toLowerCase())
+                                ".XLSX".toLowerCase())
                                 || filename.toLowerCase().endsWith(
-                                ".JPG".toLowerCase())
-                                || filename.toLowerCase().endsWith(
-                                ".JPEG".toLowerCase())) {
+                                ".XLS".toLowerCase())) {
                             endsWith = true;
 
                         }
