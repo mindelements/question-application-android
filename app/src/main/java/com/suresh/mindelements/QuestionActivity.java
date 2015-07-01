@@ -16,11 +16,13 @@ import android.widget.EditText;
 import com.suresh.utility.HelperService;
 import com.suresh.utility.ServerRequestTask;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -110,7 +112,7 @@ public class QuestionActivity extends ActionBarActivity {
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpPut httpost = new HttpPut(requestURL);
                 MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-                entity.addPart("fileContents", new FileBody(f));
+                entity.addPart("inputFile", new FileBody(f));
                 httpost.setEntity(entity);
 
                 HttpResponse response;

@@ -57,6 +57,9 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
             case "getNextQuestion":
                 singleQuestionActivity.getQuestionInBackground();
                 break;
+            case "checkAnswer":
+                singleQuestionActivity.checkAnswerInBackground();
+                break;
             default:
                 break;
         }

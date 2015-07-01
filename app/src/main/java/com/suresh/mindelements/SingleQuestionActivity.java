@@ -36,7 +36,9 @@ public class SingleQuestionActivity extends ActionBarActivity {
     TextView questionSetTotalValueLabel;
     TextView totalQuestionLabel;
     TextView numberOfSetsDoneLabel;
-    Map selection;
+    TextView answerLabel;
+    Map<String,String> selection;
+    Map<String,String> revSelection;
 
     TextView questionLabel;
 
@@ -44,6 +46,10 @@ public class SingleQuestionActivity extends ActionBarActivity {
     public static String QUESTION_STATUS = "";
     public static String SESSION_ID = "";
     public static String MEMBER_ID = "";
+    public static String ANSWER = "";
+    public static String QUESTION_NUMBER = "";
+
+
 
 
     @Override
@@ -67,12 +73,18 @@ public class SingleQuestionActivity extends ActionBarActivity {
         questionSetTotalValueLabel = (TextView) findViewById(R.id.questionSetTotalValueLabel);
         totalQuestionLabel = (TextView) findViewById(R.id.totalQuestionLabel);
         numberOfSetsDoneLabel = (TextView) findViewById(R.id.numberOfSetsDoneLabel);
+        answerLabel = (TextView) findViewById(R.id.answerLabel);
 
         this.selection = (Map) hashMap.get("selection");
         this.QUESTION_TYPE = hashMap.get("questionType").toString();
         this.QUESTION_STATUS = hashMap.get("status").toString();
         this.SESSION_ID = hashMap.get("sessionId").toString();
         this.MEMBER_ID = hashMap.get("memberId").toString();
+        this.QUESTION_NUMBER = hashMap.get("questionNumber").toString();
+
+        revSelection = new HashMap<String,String>();
+        for(Map.Entry<String,String> entry : selection.entrySet())
+            revSelection.put(entry.getValue(), entry.getKey());
 
         /**
          * Set text to the labels initiated earlier
@@ -183,7 +195,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
             i++;
             CheckBox cb = new CheckBox(this);
             cb.setText(selection.get(key.toString()).toString());
-            cb.setId(i+6);
+            cb.setId(i + 6);
             ll.addView(cb);
         }
     }
@@ -237,4 +249,79 @@ public class SingleQuestionActivity extends ActionBarActivity {
             System.err.println(ex);
         }
     }
+
+    /**
+     *
+     * @param v
+     * Calls method for retrieving next question in background
+     */
+    public void checkAnswer(View v){
+
+        new ServerRequestTask("Please wait...", this, this)
+                .execute("checkAnswer");
+
+    }
+
+    /**
+     * Method for checking answer in background
+     */
+    public void checkAnswerInBackground(){
+
+        doAnswerCheck();
+        String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/checkAnswer/"+ANSWER+"/"+MEMBER_ID+"/"+SESSION_ID+"/"+QUESTION_NUMBER;
+        try{
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(requestURL);
+            HttpResponse response;
+            response = httpclient.execute(httpGet);
+
+            int responseCode = response.getStatusLine().getStatusCode();
+            String reponseMessage = response.getStatusLine().getReasonPhrase();
+
+            Log.d(getClass().getName(),"Response Code for Answer check -------------->> "+responseCode);
+            Log.d(getClass().getName(),"Response Message Response Code for Answer check-------------->> "+reponseMessage);
+
+            String firstResponse2 = EntityUtils.toString(response.getEntity());
+            JSONObject mainObject = new JSONObject(firstResponse2);
+            /**
+             * Converts JSONObject to Map
+             */
+            HashMap map  =  HelperService.jsonToMap(mainObject);
+
+            if(responseCode==201) {
+                Log.d(getClass().getName(), "JSON for Answer check-------------->>" + firstResponse2);
+                answerLabel.setText(map.get("answer").toString());
+            }
+
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+    }
+
+    /**
+     * Checks single answer from radio button and multiple answer from checkboxes
+     */
+    private void doAnswerCheck(){
+        if(QUESTION_TYPE.equalsIgnoreCase("single")){
+            RadioGroup rg=(RadioGroup)findViewById(R.id.radiogroup);
+            RadioButton rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
+            ANSWER = revSelection.get(rb.getText().toString());
+        }
+        if(QUESTION_TYPE.equalsIgnoreCase("multi")){
+            ANSWER = "";
+            for(int i=1 ;i<=4 ;i++){
+                CheckBox checkBox = (CheckBox) findViewById(i*1+6);
+                boolean flag = checkBox.isChecked();
+                String value = checkBox.getText().toString();
+                Log.d(getClass().getName(),"Value: "+value+" is checked-------------->> "+flag);
+                if(flag){
+                    if(!ANSWER.equals("")) ANSWER+=",";
+                    ANSWER+=revSelection.get(value);
+                }
+            }
+        }
+    }
+
 }
