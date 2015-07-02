@@ -1,6 +1,7 @@
 package com.suresh.mindelements;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -37,6 +38,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
     TextView totalQuestionLabel;
     TextView numberOfSetsDoneLabel;
     TextView answerLabel;
+    Button nextQuestionButton;
     Map<String,String> selection;
     Map<String,String> revSelection;
 
@@ -48,6 +50,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
     public static String MEMBER_ID = "";
     public static String ANSWER = "";
     public static String QUESTION_NUMBER = "";
+
 
 
 
@@ -74,6 +77,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
         totalQuestionLabel = (TextView) findViewById(R.id.totalQuestionLabel);
         numberOfSetsDoneLabel = (TextView) findViewById(R.id.numberOfSetsDoneLabel);
         answerLabel = (TextView) findViewById(R.id.answerLabel);
+        nextQuestionButton = (Button) findViewById(R.id.nextQuestionButton);
 
         this.selection = (Map) hashMap.get("selection");
         this.QUESTION_TYPE = hashMap.get("questionType").toString();
@@ -215,7 +219,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
     /**
      * Method which is executed in background
      */
-    public void getQuestionInBackground(){
+    public void getQuestionInBackground() {
         Log.d(getClass().getName(), "Fetching question-------------->>");
         String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/getNextQuestion/"+MEMBER_ID+"/"+SESSION_ID;
         try{
@@ -262,12 +266,26 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
     }
 
+    public void processAfterCheckAnswer(){
+        if(!answerLabel.getText().toString().equals("")){
+            nextQuestionButton.setClickable(true);
+        }else{
+            answerLabel.setText("Please provide answer...");
+        }
+    }
+
     /**
      * Method for checking answer in background
      */
     public void checkAnswerInBackground(){
+        ANSWER = "";
 
         doAnswerCheck();
+        /**
+         * If there is no answer given do not send request
+         */
+        Log.d(getClass().getName(),"ANSWER -------------->> "+ANSWER);
+        if(ANSWER=="")return;
         String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/checkAnswer/"+ANSWER+"/"+MEMBER_ID+"/"+SESSION_ID+"/"+QUESTION_NUMBER;
         try{
 
@@ -289,7 +307,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
              */
             HashMap map  =  HelperService.jsonToMap(mainObject);
 
-            if(responseCode==201) {
+            if(responseCode == 201) {
                 Log.d(getClass().getName(), "JSON for Answer check-------------->>" + firstResponse2);
                 answerLabel.setText(map.get("answer").toString());
             }
@@ -307,6 +325,13 @@ public class SingleQuestionActivity extends ActionBarActivity {
         if(QUESTION_TYPE.equalsIgnoreCase("single")){
             RadioGroup rg=(RadioGroup)findViewById(R.id.radiogroup);
             RadioButton rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
+            /**
+             * If none of the option is selected
+             */
+            if(rb == null){
+                Log.d(getClass().getName(),"None of the radio button is checked");
+                return;
+            }
             ANSWER = revSelection.get(rb.getText().toString());
         }
         if(QUESTION_TYPE.equalsIgnoreCase("multi")){

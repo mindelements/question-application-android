@@ -59,6 +59,7 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
                 break;
             case "checkAnswer":
                 singleQuestionActivity.checkAnswerInBackground();
+                returnValue = "processAfterCheckAnswer";
                 break;
             default:
                 break;
@@ -69,8 +70,8 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String params) {
         super.onPostExecute(params);
         pDialog.dismiss();
-        if (params.equals("processAfterLogin")) {
-//
+        if (params.equals("processAfterCheckAnswer")) {
+         singleQuestionActivity.processAfterCheckAnswer();
         }
 
     }
