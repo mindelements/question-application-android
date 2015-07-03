@@ -119,17 +119,35 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id){
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.mainMenu:
+                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(myIntent, 0);
+                break;
+            case R.id.questionToolMenu:
+                Intent intent = new Intent(SingleQuestionActivity.this, QuestionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.quizToolMenu:
+                Intent intent2 = new Intent(SingleQuestionActivity.this, QuizActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.aboutMenu:
+                break;
+            case R.id.quitMenu:
+                Intent quit = new Intent(getApplicationContext(), MainActivity.class);
+                quit.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                quit.putExtra("EXIT", true);
+                startActivity(quit);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
+        return true;
 
-        return super.onOptionsItemSelected(item);
     }
     public void displayOutOfQuestionView(){
 

@@ -56,8 +56,34 @@ public class QuestionActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
+        int id = item.getItemId();
+        switch (id){
+
+            case R.id.mainMenu:
+                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(myIntent, 0);
+                break;
+            case R.id.questionToolMenu:
+                Intent intent = new Intent(QuestionActivity.this, QuestionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.quizToolMenu:
+                Intent intent2 = new Intent(QuestionActivity.this, QuizActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.aboutMenu:
+                break;
+            case R.id.quitMenu:
+                Intent quit = new Intent(getApplicationContext(), MainActivity.class);
+                quit.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                quit.putExtra("EXIT", true);
+                startActivity(quit);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+
+        }
         return true;
     }
 
@@ -103,7 +129,7 @@ public class QuestionActivity extends ActionBarActivity {
 
         memberIdField = (EditText) findViewById(R.id.memberIdField);
         String memberId = memberIdField.getText().toString().trim();
-        Log.d(getClass().getName(),"Selected dir "+fileName);
+        Log.d(getClass().getName(), "Selected dir " + fileName);
         try {
             File f = new File(fileName);
             String requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//questions/getFirstQuestion/"+memberId+"/inputFile";

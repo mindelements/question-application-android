@@ -29,8 +29,35 @@ public class QuizActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivityForResult(myIntent, 0);
+        int id = item.getItemId();
+        switch (id){
+
+            case R.id.mainMenu:
+                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(myIntent, 0);
+                break;
+            case R.id.questionToolMenu:
+                Intent intent = new Intent(QuizActivity.this, QuestionActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.quizToolMenu:
+                Intent intent2 = new Intent(QuizActivity.this, QuizActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.aboutMenu:
+                break;
+            case R.id.quitMenu:
+                Intent quit = new Intent(getApplicationContext(), MainActivity.class);
+                quit.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                quit.putExtra("EXIT", true);
+                startActivity(quit);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+
+        }
         return true;
     }
+
 }

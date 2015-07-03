@@ -5,7 +5,7 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/questionToolMenu" android:title="Question Tool"
         android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/quziToolMenu" android:title="Quiz Tool"
+    <item android:id="@+id/quizToolMenu" android:title="Quiz Tool"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/aboutMenu" android:title="About"
         android:orderInCategory="100" app:showAsAction="never" />
