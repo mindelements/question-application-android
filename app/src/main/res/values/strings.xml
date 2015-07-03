@@ -6,4 +6,5 @@
     <string name="title_activity_question">QuestionActivity</string>
     <string name="title_activity_quiz">QuizActivity</string>
     <string name="title_activity_single_question">SingleQuestionActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
 </resources>

@@ -8,15 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class QuizActivity extends ActionBarActivity {
+public class AboutActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.activity_about);
         ActionBar actionBar = getSupportActionBar();
         actionBar.show();
-        actionBar.setTitle("Quiz");
+        actionBar.setTitle("About");
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -28,7 +28,7 @@ public class QuizActivity extends ActionBarActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
 
@@ -37,11 +37,11 @@ public class QuizActivity extends ActionBarActivity {
                 startActivityForResult(myIntent, 0);
                 break;
             case R.id.questionToolMenu:
-                Intent intent = new Intent(QuizActivity.this, QuestionActivity.class);
+                Intent intent = new Intent(AboutActivity.this, QuestionActivity.class);
                 startActivity(intent);
                 break;
             case R.id.quizToolMenu:
-                Intent intent2 = new Intent(QuizActivity.this, QuizActivity.class);
+                Intent intent2 = new Intent(AboutActivity.this, QuizActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.aboutMenu:
@@ -62,5 +62,4 @@ public class QuizActivity extends ActionBarActivity {
         }
         return true;
     }
-
 }

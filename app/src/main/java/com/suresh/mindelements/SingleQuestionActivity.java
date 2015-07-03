@@ -113,7 +113,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_single_question, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -135,12 +135,17 @@ public class SingleQuestionActivity extends ActionBarActivity {
                 startActivity(intent2);
                 break;
             case R.id.aboutMenu:
+                Intent intent3 = new Intent(SingleQuestionActivity.this, AboutActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.quitMenu:
                 Intent quit = new Intent(getApplicationContext(), MainActivity.class);
                 quit.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 quit.putExtra("EXIT", true);
                 startActivity(quit);
+                return true;
+            case android.R.id.home:
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

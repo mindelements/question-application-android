@@ -36,6 +36,10 @@
             android:label="@string/title_activity_single_question" >
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
     </application>
 
 </manifest>

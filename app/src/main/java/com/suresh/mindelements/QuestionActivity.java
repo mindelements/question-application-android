@@ -72,12 +72,17 @@ public class QuestionActivity extends ActionBarActivity {
                 startActivity(intent2);
                 break;
             case R.id.aboutMenu:
+                Intent intent3 = new Intent(QuestionActivity.this, AboutActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.quitMenu:
                 Intent quit = new Intent(getApplicationContext(), MainActivity.class);
                 quit.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 quit.putExtra("EXIT", true);
                 startActivity(quit);
+                return true;
+            case android.R.id.home:
+                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
