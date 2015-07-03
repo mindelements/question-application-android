@@ -171,6 +171,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
         tv.setPadding(15, 20, 0, 0);
         tv.setTypeface(null, Typeface.BOLD);
         tv.setTextSize(20);
+        tv.setTextColor(Color.rgb(255,255,255));
         ll.addView(tv);
 
         Button button = new Button(this);

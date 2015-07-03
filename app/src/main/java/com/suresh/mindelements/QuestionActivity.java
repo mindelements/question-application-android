@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.suresh.utility.HelperService;
 import com.suresh.utility.ServerRequestTask;
@@ -125,7 +126,21 @@ public class QuestionActivity extends ActionBarActivity {
     }
 
     public void uploadFile(View v){
-
+        String message = "";
+        memberIdField = (EditText) findViewById(R.id.memberIdField);
+        String memberId = memberIdField.getText().toString();
+        if(memberId.equals("") || fileName.equals("")){
+            if(memberId.equals("") && fileName.equals("")){
+                message = "Please enter required info...";
+            }else if(memberId.equals("")){
+                message = "Please enter Member ID...";
+            }else if(fileName.equals("")){
+                message = "Please select file...";
+            }
+            Toast.makeText(getApplicationContext(), message,
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
         new ServerRequestTask("Uploading file..... Please wait", this, this)
                 .execute("uploadFile");
     }

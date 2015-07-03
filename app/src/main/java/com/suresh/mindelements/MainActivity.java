@@ -1,6 +1,8 @@
 package com.suresh.mindelements;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,6 +10,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -83,5 +92,59 @@ public class MainActivity extends ActionBarActivity {
     public void getQuizView(View v) {
         Intent intent = new Intent(MainActivity.this, QuizActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     * Copy sample template file inside asset folder to Download folder
+     * @param v
+     */
+    public void copyTemplate(View v){
+        copyAssets();
+    }
+
+    private void copyAssets() {
+
+        AssetManager assetManager = getAssets();
+        String filename = "Question-Template.xlsx";
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open("Question-Template.xlsx");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
+        }
+        try {
+            File outFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/", filename);
+            out = new FileOutputStream(outFile);
+            copyFile(in, out);
+            Toast.makeText(getApplicationContext(), "Copied to Download folder",
+                    Toast.LENGTH_LONG).show();
+        } catch(IOException e) {
+            Log.e("tag", "Failed to copy asset file: " + filename, e);
+        }
+        finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+        }
+
+    }
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
     }
 }
