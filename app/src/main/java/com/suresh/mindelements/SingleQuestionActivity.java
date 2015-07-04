@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.suresh.utility.HelperService;
@@ -50,6 +51,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
     public static String MEMBER_ID = "";
     public static String ANSWER = "";
     public static String QUESTION_NUMBER = "";
+    public static HashMap REVIEW_MAP = new HashMap();
 
 
 
@@ -100,7 +102,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
         totalQuestionLabel.setText("Total question : "+questionBucketDetails.get("totalQuestion"));
         numberOfSetsDoneLabel.setText("Number of sets done : " + questionBucketDetails.get("numberOfSetsDone"));
 
-        if(QUESTION_TYPE.equals("")){
+        if(QUESTION_TYPE.equals("") || QUESTION_STATUS.equalsIgnoreCase("QUESTION_SET_TOTAL_REACHED")){
             displayOutOfQuestionView();
         }else{
             if(QUESTION_TYPE.equalsIgnoreCase("single"))
@@ -131,8 +133,10 @@ public class SingleQuestionActivity extends ActionBarActivity {
                 startActivity(intent);
                 break;
             case R.id.quizToolMenu:
-                Intent intent2 = new Intent(SingleQuestionActivity.this, QuizActivity.class);
+                Intent intent2 = new Intent(SingleQuestionActivity.this, QuestionActivity.class);
+                intent2.putExtra("Activity", "quiz");
                 startActivity(intent2);
+
                 break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(SingleQuestionActivity.this, AboutActivity.class);
@@ -171,20 +175,16 @@ public class SingleQuestionActivity extends ActionBarActivity {
         tv.setPadding(15, 20, 0, 0);
         tv.setTypeface(null, Typeface.BOLD);
         tv.setTextSize(20);
-        tv.setTextColor(Color.rgb(255,255,255));
+        tv.setTextColor(Color.rgb(255, 255, 255));
         ll.addView(tv);
 
-        Button button = new Button(this);
-        button.setText("Review Answers");
-        button.setPadding(15, 20, 0, 0);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        rel_btn.topMargin = 500;
 
-            }
-        });
-
-        ll.addView(button);
+        Button reviewAnswerButton  = (Button) findViewById(R.id.reviewAnswerButton);
+        reviewAnswerButton.setVisibility(View.VISIBLE);
+        reviewAnswerButton.setLayoutParams(rel_btn);
 
     }
 
@@ -193,7 +193,6 @@ public class SingleQuestionActivity extends ActionBarActivity {
      */
     public void addRadioButtons() {
 
-        Log.d(getClass().getName(), "Options Map: -------------->>" + selection.keySet());
         LinearLayout ll = new LinearLayout(this);
         RadioGroup rg = (RadioGroup) findViewById(R.id.radiogroup);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -226,6 +225,56 @@ public class SingleQuestionActivity extends ActionBarActivity {
             cb.setId(i + 6);
             ll.addView(cb);
         }
+    }
+
+    public void reviewAllAnswer(View v){
+        new ServerRequestTask("Reviewing answers...Please wait", this, this)
+                .execute("reviewAllAnswer");
+    }
+
+    public void reviewAllAnswerInBackground(){
+
+        Map<String,String> review = new HashMap<>();
+        Log.d(getClass().getName(), "Fetching question-------------->>");
+        String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/getWrongAnswer/"+MEMBER_ID+"/"+SESSION_ID;
+        try{
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(requestURL);
+            HttpResponse response;
+            response = httpclient.execute(httpGet);
+
+            int responseCode = response.getStatusLine().getStatusCode();
+            String reponseMessage = response.getStatusLine().getReasonPhrase();
+
+            Log.d(getClass().getName(),"Response Code for Review All answer -------------->>"+responseCode);
+            Log.d(getClass().getName(),"Response Message Review All answer-------------->>"+reponseMessage);
+
+            String firstResponse2 = EntityUtils.toString(response.getEntity());
+            JSONObject mainObject = new JSONObject(firstResponse2);
+            /**
+             * Converts JSONObject to Map
+             */
+            HashMap map  =  HelperService.jsonToMap(mainObject);
+
+            if(responseCode==201) {
+                Log.d(getClass().getName(), "Map -------------->>" + map);
+                REVIEW_MAP = map;
+                review.put("question", (String) map.get("question"));
+                review.put("question", (String) map.get("question"));
+            }
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+    }
+
+    public void processAfterReviewAnswer(){
+
+        Intent myIntent = new Intent(getApplicationContext(), WrongAnswerAvtivity.class);
+        REVIEW_MAP.put("memberId",MEMBER_ID);
+        myIntent.putExtra("dataMap", REVIEW_MAP);
+        startActivityForResult(myIntent, 0);
     }
 
     /**

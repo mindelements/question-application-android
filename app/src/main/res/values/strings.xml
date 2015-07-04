@@ -7,4 +7,5 @@
     <string name="title_activity_quiz">QuizActivity</string>
     <string name="title_activity_single_question">SingleQuestionActivity</string>
     <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_wrong_answer_avtivity">WrongAnswerAvtivity</string>
 </resources>

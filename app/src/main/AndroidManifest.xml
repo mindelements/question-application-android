@@ -38,7 +38,13 @@
         </activity>
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".WrongAnswerAvtivity"
+            android:label="@string/title_activity_wrong_answer_avtivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.suresh.utility.HelperService;
@@ -27,6 +28,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -37,6 +39,7 @@ public class QuestionActivity extends ActionBarActivity {
     Button selectFileButton;
     EditText memberIdField;
     String fileName = "";
+    String parent = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,13 @@ public class QuestionActivity extends ActionBarActivity {
         actionBar.show();
         actionBar.setTitle("Question");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if(getIntent().getExtras() != null && getIntent().getStringExtra("Activity").equalsIgnoreCase("quiz")){
+            parent = "QUIZ";
+            TextView tv = (TextView) findViewById(R.id.textView4);
+            tv.setText("Message : Practice question tool");
+        }
+
     }
 
     @Override
@@ -67,9 +77,9 @@ public class QuestionActivity extends ActionBarActivity {
             case R.id.questionToolMenu:
                 Intent intent = new Intent(QuestionActivity.this, QuestionActivity.class);
                 startActivity(intent);
-                break;
             case R.id.quizToolMenu:
-                Intent intent2 = new Intent(QuestionActivity.this, QuizActivity.class);
+                Intent intent2 = new Intent(QuestionActivity.this, QuestionActivity.class);
+                intent2.putExtra("Activity", "quiz");
                 startActivity(intent2);
                 break;
             case R.id.aboutMenu:
@@ -87,8 +97,6 @@ public class QuestionActivity extends ActionBarActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
-
         }
         return true;
     }
@@ -147,12 +155,20 @@ public class QuestionActivity extends ActionBarActivity {
 
     public void uploadFileInBackground(){
 
+        JSONArray jsonArray = null;
+        JSONObject mainObject = null;
+
         memberIdField = (EditText) findViewById(R.id.memberIdField);
         String memberId = memberIdField.getText().toString().trim();
         Log.d(getClass().getName(), "Selected dir " + fileName);
         try {
             File f = new File(fileName);
-            String requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//questions/getFirstQuestion/"+memberId+"/inputFile";
+            String requestURL = "";
+            if(parent.equalsIgnoreCase("QUIZ")){
+                requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//quiz/getQuizQuestions/"+memberId+"/inputFile";
+            }else{
+                requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//questions/getFirstQuestion/"+memberId+"/inputFile";
+            }
 
             try {
                 HttpClient httpclient = new DefaultHttpClient();
@@ -171,16 +187,31 @@ public class QuestionActivity extends ActionBarActivity {
 
                 String firstResponse = EntityUtils.toString(response.getEntity());
 
-                JSONObject mainObject = new JSONObject(firstResponse);
+                if(parent.equalsIgnoreCase("QUIZ")){
+                    jsonArray = new JSONArray(firstResponse);
+                    mainObject = new JSONObject();
+                    mainObject.put("datas",jsonArray);
+                }else{
+                    mainObject = new JSONObject(firstResponse);
+                }
                 /**
                  * Converts JSONObject to Map
                  */
                 HashMap map  =  HelperService.jsonToMap(mainObject);
                 if(responseCode==201){
-                    map.put("memberId",memberId);
-                    Intent intent = new Intent(QuestionActivity.this, SingleQuestionActivity.class);
-                    intent.putExtra("dataMap", map);
-                    startActivity(intent);
+
+                    if(parent.equalsIgnoreCase("QUIZ")){
+                        map.put("memberId",memberId);
+                        Intent intent = new Intent(QuestionActivity.this, QuizActivity.class);
+                        intent.putExtra("dataMap", map);
+                        startActivity(intent);
+                    }else{
+                        map.put("memberId",memberId);
+                        Intent intent = new Intent(QuestionActivity.this, SingleQuestionActivity.class);
+                        intent.putExtra("dataMap", map);
+                        startActivity(intent);
+                    }
+
                 }
 
             } catch (Exception ex) {
