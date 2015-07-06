@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -168,6 +169,8 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(15, 5, 0, 0);
+        ll.setGravity(Gravity.CENTER_HORIZONTAL);
 
         TextView tv = new TextView(this);
         tv.setText("Total question set reached. Review wrong answer.");
@@ -178,13 +181,19 @@ public class SingleQuestionActivity extends ActionBarActivity {
         tv.setTextColor(Color.rgb(255, 255, 255));
         ll.addView(tv);
 
+        Button button = new Button(this);
+        button.setText("Review Answers");
+        button.setBackgroundColor(Color.rgb(240, 240, 240));
         RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        rel_btn.topMargin = 500;
-
-        Button reviewAnswerButton  = (Button) findViewById(R.id.reviewAnswerButton);
-        reviewAnswerButton.setVisibility(View.VISIBLE);
-        reviewAnswerButton.setLayoutParams(rel_btn);
+        button.setLayoutParams(rel_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reviewAllAnswer(v);
+            }
+        });
+        ll.addView(button);
 
     }
 
