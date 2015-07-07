@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.suresh.mindelements.QuestionActivity;
+import com.suresh.mindelements.QuizActivity;
 import com.suresh.mindelements.SingleQuestionActivity;
 import com.suresh.mindelements.WrongAnswerAvtivity;
 
@@ -20,6 +21,7 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
     QuestionActivity activity;
     SingleQuestionActivity singleQuestionActivity;
     WrongAnswerAvtivity wrongAnswerAvtivity;
+    QuizActivity quizActivity;
     /**
      *
      * Other constructor can be added here along with the activity
@@ -45,12 +47,20 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
         message = dialogueMessage;
     }
 
+    public ServerRequestTask(String dialogueMessage, Context con,
+                             QuizActivity act) {
+        context = con;
+        quizActivity = act;
+        message = dialogueMessage;
+    }
+
     @Override
     protected void onPreExecute() {
         pDialog = new ProgressDialog(context);
         pDialog.setMessage(message);
         pDialog.setCancelable(false);
-        pDialog.show();
+        if(!message.equalsIgnoreCase("uploadAnswer"))
+            pDialog.show();
     }
 
     @Override
@@ -66,6 +76,9 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
             case "getNextQuestion":
                 singleQuestionActivity.getQuestionInBackground();
                 break;
+            case "getNextQuestionAgain":
+                wrongAnswerAvtivity.getQuestionInBackground();
+                break;
             case "checkAnswer":
                 singleQuestionActivity.checkAnswerInBackground();
                 returnValue = "processAfterCheckAnswer";
@@ -78,6 +91,10 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
                 wrongAnswerAvtivity.reviewAllAnswerInBackground();
                 returnValue = "processAfterReviewAnswer2";
                 break;
+            case "uploadAnswer":
+                quizActivity.uploadAnswerInBackground();
+//                returnValue = "processAfterReviewAnswer2";
+                break;
             default:
                 break;
         }
@@ -88,7 +105,7 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
         super.onPostExecute(params);
         pDialog.dismiss();
         if (params.equals("processAfterCheckAnswer")) {
-         singleQuestionActivity.processAfterCheckAnswer();
+            singleQuestionActivity.processAfterCheckAnswer();
         }else if(params.equals("processAfterReviewAnswer")){
             singleQuestionActivity.processAfterReviewAnswer();
         }else if(params.equals("processAfterReviewAnswer2")){

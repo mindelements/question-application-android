@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -19,7 +21,19 @@ import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.suresh.utility.HelperService;
+import com.suresh.utility.ServerRequestTask;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +42,14 @@ import java.util.Map;
 public class QuizActivity extends ActionBarActivity {
 
     public static String QUESTION_TYPE = "";
+    public static String QUESTION_NUMBER = "";
+    public static String MEMBER_NUMBER = "";
+    public static String SESSION_ID = "";
+    public static String ANSWER = "";
     Map<String,String> selection;
     Map<String,String> revSelection;
     TableLayout tableLayout;
+    public static List answerList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +68,18 @@ public class QuizActivity extends ActionBarActivity {
         List allQuestionDetails = (List) hashMap.get("datas");
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
 
+        Log.d(getClass().getName(), "Selected ID:  " + allQuestionDetails);
+
+
         int i=0;
         for(Object m : allQuestionDetails){
             Map singleQuestionDetails = (Map) allQuestionDetails.get(i);
 
             QUESTION_TYPE = singleQuestionDetails.get("questionType").toString();
+            QUESTION_NUMBER = singleQuestionDetails.get("questionNumber").toString();
+            MEMBER_NUMBER = singleQuestionDetails.get("memberNumber").toString();
+            SESSION_ID = singleQuestionDetails.get("sessionId").toString();
+
             selection = (Map)singleQuestionDetails.get("selection");
             revSelection = new HashMap<String,String>();
             for(Map.Entry<String,String> entry : selection.entrySet())
@@ -142,6 +168,18 @@ public class QuizActivity extends ActionBarActivity {
             rg.addView(rdbtn);
             k--;
         }
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Log.d(getClass().getName(), "Selected ID:  " + checkedId);
+                RadioButton radioButton = (RadioButton)group.findViewById(checkedId);
+                Log.d(getClass().getName(), "Selected Text:  " + radioButton.getText());
+                ANSWER = revSelection.get(radioButton.getText());
+                uploadAnswerToServer();
+
+            }
+        });
 
         TableRow row= new TableRow(this);
         TableRow.LayoutParams lp2 = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
@@ -167,17 +205,79 @@ public class QuizActivity extends ActionBarActivity {
         TextView questionLabel = new TextView(this);
         questionLabel.setText(singleQuestionDetails.get("question").toString());
         questionLabel.setPadding(10, 0, 0, 0);
-        questionLabel.setTextColor(Color.rgb(255,255,255));
+        questionLabel.setTextColor(Color.rgb(255, 255, 255));
         questionLabel.setTextSize(20);
         questionRow.addView(questionLabel);
         ll.addView(questionRow,i);
         i++;
 
+        answerList.clear();
         for(Object key : selection.keySet()){
             CheckBox cb = new CheckBox(this);
             cb.setText(selection.get(key.toString()).toString());
             cb.setId(i + 6);
+
+            cb.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+//                    String value = (String) ((CheckBox) v).getText();
+//                    if (((CheckBox) v).isChecked()) {
+//                        answerList.add(revSelection.get(value));
+//                        ANSWER = TextUtils.join(",",answerList);
+//                    } else {
+//                        answerList.remove(revSelection.get(value));
+//                        ANSWER = TextUtils.join(",",answerList);
+//                    }
+//
+//                        uploadAnswerToServer();
+//                    Log.d(getClass().getName(), "ANSWER-------------->> " + ANSWER);
+
+                }
+            });
             ll.addView(cb,i);
         }
+
+    }
+
+
+    public void uploadAnswerToServer(){
+
+        new ServerRequestTask("uploadAnswer", this, this)
+                .execute("uploadAnswer");
+
+    }
+
+    public void uploadAnswerInBackground(){
+        Log.d(getClass().getName(), "Uploading answer to server------------->>");
+        String requestURL = "https://qa1-mindelements.rhcloud.com/question-web/app/quiz/save/"+QUESTION_NUMBER+"/"+ANSWER+"/"+MEMBER_NUMBER+"/"+SESSION_ID;
+        Log.d(getClass().getName(), "Uploading answer to server------------->>URL : "+requestURL);
+        try{
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(requestURL);
+            HttpResponse response;
+            response = httpclient.execute(httpGet);
+
+            int responseCode = response.getStatusLine().getStatusCode();
+            String reponseMessage = response.getStatusLine().getReasonPhrase();
+
+            Log.d(getClass().getName(),"Response Code for Upload  answer -------------->>"+responseCode);
+            Log.d(getClass().getName(),"Response Message Upload answer-------------->>"+reponseMessage);
+
+            String firstResponse2 = EntityUtils.toString(response.getEntity());
+            JSONObject mainObject = new JSONObject(firstResponse2);
+            /**
+             * Converts JSONObject to Map
+             */
+            HashMap map  =  HelperService.jsonToMap(mainObject);
+
+            if(responseCode==200) {
+                Log.d(getClass().getName(), "Map -------------->>" + map);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
     }
 }

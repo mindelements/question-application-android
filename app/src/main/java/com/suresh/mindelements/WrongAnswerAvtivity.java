@@ -40,6 +40,7 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
 
     public static String MEMBER_ID;
     public static String SESSION_ID;
+    public static String QUESTION_STATUS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +60,15 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
-        Log.d(getClass().getName(), "Received Map Size -------------->>" + hashMap.size());
-        Log.d(getClass().getName(), "Received Map -------------->>" + hashMap);
+
+        Log.d(getClass().getName(), "Data Map inside WrongAnswerActivity------>>"+hashMap);
+
 
         MEMBER_ID = hashMap.get("memberId").toString();
         SESSION_ID = hashMap.get("sessionId").toString();
+        QUESTION_STATUS = hashMap.get("status").toString();
 
-        if(!hashMap.get("status").toString().equalsIgnoreCase("STATUS_NULL_QUESTIONS_NOT_ANSWERED")){
+        if(!QUESTION_STATUS.equalsIgnoreCase("STATUS_NULL_QUESTIONS_NOT_ANSWERED")){
             selection = (Map) hashMap.get("selection");
             revSelection = new HashMap<String,String>();
             for(Map.Entry<String,String> entry : selection.entrySet())
@@ -79,18 +82,19 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
             for(String ans : answers){
                 ansList.add(selection.get(ans));
             }
+            nextWrongAnswerButton.setText("Review next answer");
             correctAnswerLabel.setText("Answer/s:\n"+ansList+"\n");
+
         }else{
             questionLabel.setText("Question:\nNot Available\n");
             optionLabel.setText("Selections:\nNot Available\n");
             correctAnswerLabel.setText("Answer/s:\nNot Available\n");
-            messageLabel.setText("You're done answering questions. Upload new questions to begin again.\n");
-            nextWrongAnswerButton.setText("Upload");
+            messageLabel.setText("No more question to review.\n");
+            nextWrongAnswerButton.setText("Next Question");
             nextWrongAnswerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(WrongAnswerAvtivity.this, QuestionActivity.class);
-                    startActivity(intent);
+                    getNextQuestionAgain();
                 }
             });
         }
@@ -142,10 +146,14 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
         new ServerRequestTask("Reviewing answers...Please wait",this,this).execute("reviewAllAnswer2");
     }
 
+    public void getNextQuestionAgain(){
+        new ServerRequestTask("Please wait...", this, this).execute("getNextQuestionAgain");
+    }
+
+
     public void reviewAllAnswerInBackground(){
 
         Map<String,String> review = new HashMap<>();
-        Log.d(getClass().getName(), "Fetching question-------------->>");
         String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/getWrongAnswer/"+MEMBER_ID+"/"+SESSION_ID;
         try{
 
@@ -168,7 +176,6 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
             HashMap map  =  HelperService.jsonToMap(mainObject);
 
             if(responseCode==201) {
-                Log.d(getClass().getName(), "Map -------------->>" + map);
                 REVIEW_MAP = map;
                 review.put("question", (String) map.get("question"));
                 review.put("question", (String) map.get("question"));
@@ -182,8 +189,47 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
     public void processAfterReviewAnswer(){
 
         Intent myIntent = new Intent(getApplicationContext(), WrongAnswerAvtivity.class);
-        REVIEW_MAP.put("memberId",MEMBER_ID);
+        REVIEW_MAP.put("memberId", MEMBER_ID);
         myIntent.putExtra("dataMap", REVIEW_MAP);
         startActivityForResult(myIntent, 0);
     }
+
+
+    /**
+     * Method which is executed in background
+     */
+    public void getQuestionInBackground() {
+        String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/getNextQuestion/"+MEMBER_ID+"/"+SESSION_ID;
+        try{
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(requestURL);
+            HttpResponse response;
+            response = httpclient.execute(httpGet);
+
+            int responseCode = response.getStatusLine().getStatusCode();
+            String reponseMessage = response.getStatusLine().getReasonPhrase();
+
+            Log.d(getClass().getName(),"Response Code for Next question -------------->>"+responseCode);
+            Log.d(getClass().getName(),"Response Message Response Code for Next question-------------->>"+reponseMessage);
+
+            String firstResponse2 = EntityUtils.toString(response.getEntity());
+            JSONObject mainObject = new JSONObject(firstResponse2);
+            /**
+             * Converts JSONObject to Map
+             */
+            HashMap map  =  HelperService.jsonToMap(mainObject);
+
+            if(responseCode==201) {
+                QUESTION_STATUS = map.get("status").toString();
+                map.put("memberId", MEMBER_ID);
+                Intent intent = new Intent(WrongAnswerAvtivity.this, SingleQuestionActivity.class);
+                intent.putExtra("dataMap", map);
+                startActivity(intent);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+    }
+
 }

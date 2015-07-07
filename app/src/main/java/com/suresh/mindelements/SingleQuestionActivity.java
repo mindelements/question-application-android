@@ -71,6 +71,8 @@ public class SingleQuestionActivity extends ActionBarActivity {
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
         Map questionBucketDetails = (Map) hashMap.get("questionBucketDetails");
 
+        Log.d(getClass().getName(), "Data Map inside SingleQuestionActivity------>>"+hashMap);
+
         /**
          * Initialisation of variables
          */
@@ -100,11 +102,15 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
         questionNumberLabel.setText("Question number : "+questionBucketDetails.get("questionNumber"));
         questionSetTotalValueLabel.setText("Question set total value : "+questionBucketDetails.get("questionSetTotalValue"));
-        totalQuestionLabel.setText("Total question : "+questionBucketDetails.get("totalQuestion"));
+        totalQuestionLabel.setText("Total question : " + questionBucketDetails.get("totalQuestion"));
         numberOfSetsDoneLabel.setText("Number of sets done : " + questionBucketDetails.get("numberOfSetsDone"));
 
-        if(QUESTION_TYPE.equals("") || QUESTION_STATUS.equalsIgnoreCase("QUESTION_SET_TOTAL_REACHED")){
-            displayOutOfQuestionView();
+        if(QUESTION_TYPE.equals("")){
+            if(QUESTION_STATUS.equalsIgnoreCase("QUESTION_SET_TOTAL_REACHED")){
+                displayOutOfQuestionView();
+            }else if(QUESTION_STATUS.equalsIgnoreCase("STATUS_NULL_QUESTIONS_NOT_ANSWERED")){
+                displayUploadNewQuestionView();
+            }
         }else{
             if(QUESTION_TYPE.equalsIgnoreCase("single"))
                 addRadioButtons();
@@ -191,6 +197,45 @@ public class SingleQuestionActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 reviewAllAnswer(v);
+            }
+        });
+        ll.addView(button);
+
+    }
+
+    public void displayUploadNewQuestionView(){
+
+        View a = findViewById(R.id.radiogroup);
+        View b = findViewById(R.id.gridLayout);
+        View c = findViewById(R.id.questionLabel);
+        View d = findViewById(R.id.textView6);
+        a.setVisibility(View.GONE);b.setVisibility(View.GONE);c.setVisibility(View.GONE);d.setVisibility(View.GONE);
+
+        LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(15, 5, 0, 0);
+        ll.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        TextView tv = new TextView(this);
+        tv.setText("Total question set anwered. You are done. Upload another question set.");
+        tv.setId(1 + 1);
+        tv.setPadding(15, 20, 0, 0);
+        tv.setTypeface(null, Typeface.BOLD);
+        tv.setTextSize(20);
+        tv.setTextColor(Color.rgb(255, 255, 255));
+        ll.addView(tv);
+
+        Button button = new Button(this);
+        button.setText("Upload");
+        button.setBackgroundColor(Color.rgb(240, 240, 240));
+        RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        button.setLayoutParams(rel_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SingleQuestionActivity.this, QuestionActivity.class);
+                startActivity(intent);
             }
         });
         ll.addView(button);
