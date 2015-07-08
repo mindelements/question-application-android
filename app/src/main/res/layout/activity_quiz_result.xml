@@ -1,14 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_image"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/bg_image"
-    tools:context="com.suresh.mindelements.QuizActivity"
-    android:id="@+id/quizView">
+    tools:context="com.suresh.mindelements.QuizResultActivity">
 
-    <TextView android:text="Questions"
+
+    <TextView android:text="Results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -17,12 +17,13 @@
         android:id="@+id/aboutLabel"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/aboutLabel"
-        android:layout_above="@+id/submitAll"
-        android:id="@+id/quizScrollView">
+        android:id="@+id/quizScrollView"
+        android:layout_above="@+id/totalCorrect">
         <TableLayout
             android:id="@+id/mainTable"
             android:layout_width="fill_parent"
@@ -34,14 +35,30 @@
 
 
     </ScrollView>
-    <Button android:id="@+id/submitAll"
+    <TextView android:id="@+id/totalCorrect"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Submit"
-        android:onClick="submitQuizAnswers"
-        android:textAllCaps="false"
-        android:layout_above="@+id/footer"
-        android:layout_centerHorizontal="true" />
+        android:text="Total Correct Answer"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:paddingLeft="10dp"
+        android:layout_above="@+id/totalQuestion" />
+    <TextView android:id="@+id/totalQuestion"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Total Question"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:paddingLeft="10dp"
+        android:layout_above="@+id/averageLabel" />
+    <TextView android:id="@+id/averageLabel"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Average"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:paddingLeft="10dp"
+        android:layout_above="@+id/footer" />
 
     <RelativeLayout
         android:id="@+id/footer"

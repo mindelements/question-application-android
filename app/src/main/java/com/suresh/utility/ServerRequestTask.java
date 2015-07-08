@@ -3,6 +3,7 @@ package com.suresh.utility;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.suresh.mindelements.QuestionActivity;
 import com.suresh.mindelements.QuizActivity;
@@ -66,7 +67,13 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        String invokingMethod = params[0];
+
+        Log.d(getClass().getName(), "--------------------"+params[0]);
+        String invokingMethod = params[0].split(":")[0];
+        String questionNumber = "";
+        if(invokingMethod.equalsIgnoreCase("uploadAnswer")){
+            questionNumber = params[0].split(":")[1];
+        }
         String returnValue = "";
 
         switch (invokingMethod) {
@@ -92,9 +99,13 @@ public class ServerRequestTask extends AsyncTask<String, Void, String> {
                 returnValue = "processAfterReviewAnswer2";
                 break;
             case "uploadAnswer":
-                quizActivity.uploadAnswerInBackground();
+                quizActivity.uploadAnswerInBackground(questionNumber);
 //                returnValue = "processAfterReviewAnswer2";
                 break;
+            case "submitQuizAnswers":
+                quizActivity.submitQuizAnswersInBackground();
+//                returnValue = "processAfterReviewAnswer2";
+
             default:
                 break;
         }

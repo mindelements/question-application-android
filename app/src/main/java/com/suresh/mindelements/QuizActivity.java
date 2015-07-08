@@ -31,6 +31,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class QuizActivity extends ActionBarActivity {
     Map<String,String> selection;
     Map<String,String> revSelection;
     TableLayout tableLayout;
-    public static List answerList = new ArrayList();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,8 @@ public class QuizActivity extends ActionBarActivity {
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
         List allQuestionDetails = (List) hashMap.get("datas");
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
+
+
 
         Log.d(getClass().getName(), "Selected ID:  " + allQuestionDetails);
 
@@ -86,9 +89,10 @@ public class QuizActivity extends ActionBarActivity {
                 revSelection.put(entry.getValue(), entry.getKey());
 
             if(QUESTION_TYPE.equalsIgnoreCase("single")){
-                addRadioButtons(singleQuestionDetails);
+                addRadioButtons(singleQuestionDetails,selection,revSelection,QUESTION_NUMBER);
             }else{
-                addCheckBoxes(singleQuestionDetails);
+                List answerList = new ArrayList();
+                addCheckBoxes(singleQuestionDetails,selection,revSelection,answerList,QUESTION_NUMBER);
             }
             i++;
         }
@@ -141,7 +145,7 @@ public class QuizActivity extends ActionBarActivity {
     /**
      * For displaying radio button for question with single answer
      */
-    public void addRadioButtons(Map singleQuestionDetails) {
+    public void addRadioButtons(Map singleQuestionDetails,final Map selection,final Map revSelection,final String questionNumber) {
         TableLayout ll = (TableLayout) findViewById(R.id.mainTable);
         int i=0;
         /**
@@ -175,8 +179,8 @@ public class QuizActivity extends ActionBarActivity {
                 Log.d(getClass().getName(), "Selected ID:  " + checkedId);
                 RadioButton radioButton = (RadioButton)group.findViewById(checkedId);
                 Log.d(getClass().getName(), "Selected Text:  " + radioButton.getText());
-                ANSWER = revSelection.get(radioButton.getText());
-                uploadAnswerToServer();
+                ANSWER = revSelection.get(radioButton.getText()).toString();
+                uploadAnswerToServer(questionNumber);
 
             }
         });
@@ -192,10 +196,11 @@ public class QuizActivity extends ActionBarActivity {
     /**
      * For displaying checkbox button for question with multiple answer
      */
-    public void addCheckBoxes(Map singleQuestionDetails) {
+    public void addCheckBoxes(Map singleQuestionDetails,final Map selection,final Map revSelection,final List answerList,final String questionNumber) {
 
-        TableLayout ll = (TableLayout) findViewById(R.id.mainTable);
+        final TableLayout ll = (TableLayout) findViewById(R.id.mainTable);
         int i=0;
+        String answer = "";
         /**
          * Row for question
          */
@@ -208,10 +213,10 @@ public class QuizActivity extends ActionBarActivity {
         questionLabel.setTextColor(Color.rgb(255, 255, 255));
         questionLabel.setTextSize(20);
         questionRow.addView(questionLabel);
-        ll.addView(questionRow,i);
+        ll.addView(questionRow, i);
         i++;
 
-        answerList.clear();
+//        ANSWER = "";
         for(Object key : selection.keySet()){
             CheckBox cb = new CheckBox(this);
             cb.setText(selection.get(key.toString()).toString());
@@ -221,17 +226,17 @@ public class QuizActivity extends ActionBarActivity {
 
                 @Override
                 public void onClick(View v) {
-//                    String value = (String) ((CheckBox) v).getText();
-//                    if (((CheckBox) v).isChecked()) {
-//                        answerList.add(revSelection.get(value));
-//                        ANSWER = TextUtils.join(",",answerList);
-//                    } else {
-//                        answerList.remove(revSelection.get(value));
-//                        ANSWER = TextUtils.join(",",answerList);
-//                    }
-//
-//                        uploadAnswerToServer();
-//                    Log.d(getClass().getName(), "ANSWER-------------->> " + ANSWER);
+                    String value = (String) ((CheckBox) v).getText();
+                    Log.d(getClass().getName(), "REV-------------->> " + revSelection);
+                    Log.d(getClass().getName(), "SEL-------------->> " + selection);
+                    if (((CheckBox) v).isChecked()) {
+                        answerList.add(revSelection.get(value));
+                    } else {
+                        answerList.remove(revSelection.get(value));
+                    }
+                    ANSWER = TextUtils.join(",",answerList);
+                    uploadAnswerToServer(questionNumber);
+                    Log.d(getClass().getName(), "ANSWER-------------->> " + answerList);
 
                 }
             });
@@ -241,17 +246,16 @@ public class QuizActivity extends ActionBarActivity {
     }
 
 
-    public void uploadAnswerToServer(){
+    public void uploadAnswerToServer(String questionNumber){
 
         new ServerRequestTask("uploadAnswer", this, this)
-                .execute("uploadAnswer");
+                .execute("uploadAnswer:"+questionNumber);
 
     }
 
-    public void uploadAnswerInBackground(){
-        Log.d(getClass().getName(), "Uploading answer to server------------->>");
-        String requestURL = "https://qa1-mindelements.rhcloud.com/question-web/app/quiz/save/"+QUESTION_NUMBER+"/"+ANSWER+"/"+MEMBER_NUMBER+"/"+SESSION_ID;
-        Log.d(getClass().getName(), "Uploading answer to server------------->>URL : "+requestURL);
+    public void uploadAnswerInBackground(String questionNumber){
+        String requestURL = "https://qa1-mindelements.rhcloud.com/question-web/app/quiz/save/"+questionNumber+"/"+ANSWER+"/"+MEMBER_NUMBER+"/"+SESSION_ID;
+        Log.d(getClass().getName(), "Uploading answer to server------------->>URL : " + requestURL);
         try{
 
             HttpClient httpclient = new DefaultHttpClient();
@@ -280,4 +284,52 @@ public class QuizActivity extends ActionBarActivity {
         }
 
     }
+
+    public void submitQuizAnswers(View v){
+        Log.d(getClass().getName(), "Submitting all quiz answers-------------->>");
+        new ServerRequestTask("Submitting answers...Please wait", this, this)
+                .execute("submitQuizAnswers");
+    }
+
+    public void submitQuizAnswersInBackground(){
+
+        JSONArray jsonArray = null;
+        JSONObject mainObject = null;
+
+        String requestURL  = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//quiz/getQuizResult/"+MEMBER_NUMBER+"/"+SESSION_ID;
+        Log.d(getClass().getName(), "Submitting all answer to server of quiz------------->>URL : " + requestURL);
+        try{
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(requestURL);
+            HttpResponse response;
+            response = httpclient.execute(httpGet);
+
+            int responseCode = response.getStatusLine().getStatusCode();
+            String reponseMessage = response.getStatusLine().getReasonPhrase();
+
+            Log.d(getClass().getName(),"Response Code for Submitting Quiz  answer -------------->>"+responseCode);
+            Log.d(getClass().getName(),"Response Message Submitting Quiz answer-------------->>"+reponseMessage);
+
+            String firstResponse2 = EntityUtils.toString(response.getEntity());
+            jsonArray = new JSONArray(firstResponse2);
+            mainObject = new JSONObject();
+            mainObject.put("datas", jsonArray);
+            /**
+             * Converts JSONObject to Map
+             */
+            HashMap map  =  HelperService.jsonToMap(mainObject);
+
+            if(responseCode==201) {
+                Intent intent = new Intent(QuizActivity.this, QuizResultActivity.class);
+                intent.putExtra("dataMap", map);
+                startActivity(intent);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+    }
+
+
 }
