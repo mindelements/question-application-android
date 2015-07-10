@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.suresh.utility.HelperService;
@@ -52,6 +53,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
     public static String MEMBER_ID = "";
     public static String ANSWER = "";
     public static String QUESTION_NUMBER = "";
+    public static String QUESTION = "";
     public static HashMap REVIEW_MAP = new HashMap();
 
 
@@ -76,7 +78,6 @@ public class SingleQuestionActivity extends ActionBarActivity {
         /**
          * Initialisation of variables
          */
-        questionLabel = (TextView) findViewById(R.id.questionLabel);
         questionNumberLabel = (TextView) findViewById(R.id.questionNumberLabel);
         questionSetTotalValueLabel = (TextView) findViewById(R.id.questionSetTotalValueLabel);
         totalQuestionLabel = (TextView) findViewById(R.id.totalQuestionLabel);
@@ -90,6 +91,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
         this.SESSION_ID = hashMap.get("sessionId").toString();
         this.MEMBER_ID = hashMap.get("memberId").toString();
         this.QUESTION_NUMBER = hashMap.get("questionNumber").toString();
+        this.QUESTION = hashMap.get("question").toString();
 
         revSelection = new HashMap<String,String>();
         for(Map.Entry<String,String> entry : selection.entrySet())
@@ -98,8 +100,6 @@ public class SingleQuestionActivity extends ActionBarActivity {
         /**
          * Set text to the labels initiated earlier
          */
-        questionLabel.setText(hashMap.get("question").toString());
-
         questionNumberLabel.setText("Question number : "+questionBucketDetails.get("questionNumber"));
         questionSetTotalValueLabel.setText("Question set total value : "+questionBucketDetails.get("questionSetTotalValue"));
         totalQuestionLabel.setText("Total question : " + questionBucketDetails.get("totalQuestion"));
@@ -167,11 +167,9 @@ public class SingleQuestionActivity extends ActionBarActivity {
     }
     public void displayOutOfQuestionView(){
 
-        View a = findViewById(R.id.radiogroup);
         View b = findViewById(R.id.gridLayout);
-        View c = findViewById(R.id.questionLabel);
-        View d = findViewById(R.id.textView6);
-        a.setVisibility(View.GONE);b.setVisibility(View.GONE);c.setVisibility(View.GONE);d.setVisibility(View.GONE);
+        View c = findViewById(R.id.textView6);
+        b.setVisibility(View.GONE);c.setVisibility(View.GONE);
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -205,11 +203,10 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
     public void displayUploadNewQuestionView(){
 
-        View a = findViewById(R.id.radiogroup);
         View b = findViewById(R.id.gridLayout);
         View c = findViewById(R.id.questionLabel);
         View d = findViewById(R.id.textView6);
-        a.setVisibility(View.GONE);b.setVisibility(View.GONE);c.setVisibility(View.GONE);d.setVisibility(View.GONE);
+        b.setVisibility(View.GONE);c.setVisibility(View.GONE);d.setVisibility(View.GONE);
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -247,9 +244,23 @@ public class SingleQuestionActivity extends ActionBarActivity {
      */
     public void addRadioButtons() {
 
+        LinearLayout ll2 = (LinearLayout)findViewById(R.id.linearLayout2);
+
+
+        ScrollView sv = new ScrollView(this);
         LinearLayout ll = new LinearLayout(this);
-        RadioGroup rg = (RadioGroup) findViewById(R.id.radiogroup);
+        RadioGroup rg = new RadioGroup(this);
+        rg.setId(99*1);
         ll.setOrientation(LinearLayout.VERTICAL);
+        sv.addView(ll);
+
+        TextView questionLabel = new TextView(this);
+        questionLabel.setText(QUESTION);
+        questionLabel.setPadding(10, 0, 0, 0);
+        questionLabel.setTextSize(16);
+        questionLabel.setTextColor(Color.rgb(255, 255, 255));
+        ll.addView(questionLabel);
+
         int i=0;
         for(Object key:selection.keySet()){
             i++;
@@ -258,7 +269,8 @@ public class SingleQuestionActivity extends ActionBarActivity {
             rdbtn.setText(selection.get(key.toString()).toString());
             rg.addView(rdbtn);
         }
-        ((ViewGroup) findViewById(R.id.radiogroup)).addView(ll);
+        ll.addView(rg);
+        ll2.addView(sv);
 
     }
 
@@ -266,11 +278,18 @@ public class SingleQuestionActivity extends ActionBarActivity {
      * For displaying checkbox button for question with multiple answer
      */
     public void addCheckBoxes() {
-        View b = findViewById(R.id.radiogroup);
-        b.setVisibility(View.GONE);
-        LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
-        ll.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout ll2 = (LinearLayout)findViewById(R.id.linearLayout2);
 
+        ScrollView sv = new ScrollView(this);
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        sv.addView(ll);
+        TextView questionLabel = new TextView(this);
+        questionLabel.setText(QUESTION);
+        questionLabel.setPadding(10, 0, 0, 0);
+        questionLabel.setTextSize(16);
+        questionLabel.setTextColor(Color.rgb(255,255,255));
+        ll.addView(questionLabel);
         int i=0;
         for(Object key:selection.keySet()) {
             i++;
@@ -279,6 +298,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
             cb.setId(i + 6);
             ll.addView(cb);
         }
+        ll2.addView(sv);
     }
 
     public void reviewAllAnswer(View v){
@@ -450,7 +470,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
      */
     private void doAnswerCheck(){
         if(QUESTION_TYPE.equalsIgnoreCase("single")){
-            RadioGroup rg=(RadioGroup)findViewById(R.id.radiogroup);
+            RadioGroup rg=(RadioGroup)findViewById(99*1);
             RadioButton rb = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
             /**
              * If none of the option is selected
