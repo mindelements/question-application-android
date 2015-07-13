@@ -14,10 +14,10 @@
         android:id="@+id/container"
         android:rowCount="9"
         android:columnCount="1"
-        android:layout_alignParentTop="true"
+        android:paddingTop="15dp"
+        android:layout_below="@+id/gridLayout"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingTop="15dp">
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,6 +28,7 @@
             android:layout_column="0"
             android:paddingLeft="10dp"
             android:textSize="16dp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"/>
 
         <TextView
@@ -39,6 +40,7 @@
             android:layout_column="0"
             android:paddingLeft="10dp"
             android:textSize="16dp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
@@ -49,6 +51,7 @@
             android:layout_column="0"
             android:paddingLeft="10dp"
             android:textSize="16dp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
@@ -59,38 +62,14 @@
             android:layout_column="0"
             android:paddingLeft="10dp"
             android:textSize="16dp"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"/>
-
-        <TextView
-            android:text=""
-            android:layout_row="4"
-            android:layout_column="0"
-            android:layout_gravity="fill"
-            />
-        <TextView
-            android:text=""
-            android:layout_row="5"
-            android:layout_column="0"
-            android:layout_gravity="fill"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Question:"
-            android:layout_row="6"
-            android:layout_column="0"
-            android:id="@+id/textView6"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:paddingLeft="10dp"
-            />
     </GridLayout>
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="133dp"
+        android:layout_below="@+id/linearLayout2"
+        android:paddingTop="20dp"
         android:paddingLeft="10dp"
         android:rowCount="2"
         android:columnCount="2"
@@ -162,9 +141,10 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:layout_above="@+id/gridLayout"
+        android:layout_height="180dp"
+        android:paddingTop="10dp"
         android:id="@+id/linearLayout2"
-        android:layout_below="@+id/container"></LinearLayout>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"></LinearLayout>
 </RelativeLayout>

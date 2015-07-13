@@ -168,8 +168,8 @@ public class SingleQuestionActivity extends ActionBarActivity {
     public void displayOutOfQuestionView(){
 
         View b = findViewById(R.id.gridLayout);
-        View c = findViewById(R.id.textView6);
-        b.setVisibility(View.GONE);c.setVisibility(View.GONE);
+//        View c = findViewById(R.id.textView6);
+        b.setVisibility(View.GONE);/*c.setVisibility(View.GONE);*/
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         ll.setOrientation(LinearLayout.VERTICAL);
@@ -205,8 +205,8 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
         View b = findViewById(R.id.gridLayout);
         View c = findViewById(R.id.questionLabel);
-        View d = findViewById(R.id.textView6);
-        b.setVisibility(View.GONE);c.setVisibility(View.GONE);d.setVisibility(View.GONE);
+//        View d = findViewById(R.id.textView6);
+        b.setVisibility(View.GONE);c.setVisibility(View.GONE);/*d.setVisibility(View.GONE);*/
 
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         ll.setOrientation(LinearLayout.VERTICAL);
