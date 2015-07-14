@@ -133,6 +133,10 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
                 quit.putExtra("EXIT", true);
                 startActivity(quit);
                 return true;
+            case R.id.helpMenu:
+                Intent intent4 = new Intent(WrongAnswerAvtivity.this, HelpActivity.class);
+                startActivity(intent4);
+                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;

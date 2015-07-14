@@ -49,7 +49,11 @@
         <activity
             android:name=".QuizResultActivity"
             android:label="@string/title_activity_quiz_result"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help" >
         </activity>
     </application>
 

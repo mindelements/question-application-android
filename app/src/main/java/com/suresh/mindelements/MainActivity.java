@@ -63,6 +63,10 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent3 = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent3);
                 break;
+            case R.id.helpMenu:
+                Intent intent4 = new Intent(MainActivity.this, HelpActivity.class);
+                startActivity(intent4);
+                break;
             case R.id.quitMenu:
                 finish();
                 return true;
