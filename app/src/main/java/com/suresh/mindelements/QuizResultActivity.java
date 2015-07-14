@@ -20,6 +20,8 @@ public class QuizResultActivity extends ActionBarActivity {
 
     TableLayout tableLayout;
     int totalCorrectAnswerCount = 0;
+    int QUESTION_COUNTER = 0;
+    int dataSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +40,13 @@ public class QuizResultActivity extends ActionBarActivity {
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
         List quizResultList = (List) hashMap.get("datas");
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
+        dataSize = quizResultList.size();
 
         int k=0;
         for(Object m : quizResultList){
             Map quizResult = (Map) quizResultList.get(k);
 
-            String question = quizResult.get("question").toString();
+            String question = (dataSize-QUESTION_COUNTER)+"."+quizResult.get("question").toString();
             Map<String,String> selection = (Map)quizResult.get("selection");
             StringBuilder optionBuilder = new StringBuilder();
             int countOption = 0;
@@ -89,6 +92,7 @@ public class QuizResultActivity extends ActionBarActivity {
                 i++;
             }
             k++;
+            QUESTION_COUNTER++;
         }
         TextView totalCorrectAnswerLabel = (TextView) findViewById(R.id.totalCorrect);
         TextView totalQuestionLabel = (TextView) findViewById(R.id.totalQuestion);

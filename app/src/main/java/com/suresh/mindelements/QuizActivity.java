@@ -50,6 +50,8 @@ public class QuizActivity extends ActionBarActivity {
     Map<String,String> selection;
     Map<String,String> revSelection;
     TableLayout tableLayout;
+    int QUESTION_COUNTER = 0;
+    int dataSize;
 
 
     @Override
@@ -68,6 +70,7 @@ public class QuizActivity extends ActionBarActivity {
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
         List allQuestionDetails = (List) hashMap.get("datas");
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
+        dataSize = allQuestionDetails.size();
 
 
 
@@ -159,7 +162,7 @@ public class QuizActivity extends ActionBarActivity {
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
         questionRow.setLayoutParams(lp);
         TextView questionLabel = new TextView(this);
-        questionLabel.setText(singleQuestionDetails.get("question").toString());
+        questionLabel.setText((dataSize-QUESTION_COUNTER)+"."+singleQuestionDetails.get("question").toString());
         questionLabel.setPadding(10, 0, 0, 0);
         questionLabel.setTextColor(Color.rgb(255,255,255));
         questionLabel.setTextSize(20);
@@ -194,6 +197,7 @@ public class QuizActivity extends ActionBarActivity {
         row.setLayoutParams(lp2);
         row.addView(rg);
         ll.addView(row,i);
+        QUESTION_COUNTER++;
     }
 
 
@@ -212,7 +216,7 @@ public class QuizActivity extends ActionBarActivity {
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
         questionRow.setLayoutParams(lp);
         TextView questionLabel = new TextView(this);
-        questionLabel.setText(singleQuestionDetails.get("question").toString());
+        questionLabel.setText((dataSize-QUESTION_COUNTER)+"."+singleQuestionDetails.get("question").toString());
         questionLabel.setPadding(10, 0, 0, 0);
         questionLabel.setTextColor(Color.rgb(255, 255, 255));
         questionLabel.setTextSize(20);
@@ -246,7 +250,7 @@ public class QuizActivity extends ActionBarActivity {
             });
             ll.addView(cb,i);
         }
-
+    QUESTION_COUNTER++;
     }
 
 
