@@ -83,6 +83,7 @@ public class QuizResultActivity extends ActionBarActivity {
                 label.setText(item);
                 label.setPadding(10, 0, 0, 0);
                 label.setTextColor(Color.rgb(255, 255, 255));
+                label.setWidth(getWindowManager().getDefaultDisplay().getWidth()-10);
                 if(correct.contains("false")){
                     label.setTextColor(Color.rgb(200, 30, 30));
                 }
