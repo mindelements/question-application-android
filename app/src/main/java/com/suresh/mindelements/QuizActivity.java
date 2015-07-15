@@ -123,6 +123,7 @@ public class QuizActivity extends ActionBarActivity {
             case R.id.questionToolMenu:
                 Intent intent = new Intent(QuizActivity.this, QuestionActivity.class);
                 startActivity(intent);
+                break;
             case R.id.quizToolMenu:
                 Intent intent2 = new Intent(QuizActivity.this, QuestionActivity.class);
                 intent2.putExtra("Activity", "quiz");
