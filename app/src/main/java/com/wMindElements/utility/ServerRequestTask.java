@@ -1,14 +1,14 @@
-package com.suresh.utility;
+package com.wMindElements.utility;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.suresh.mindelements.QuestionActivity;
-import com.suresh.mindelements.QuizActivity;
-import com.suresh.mindelements.SingleQuestionActivity;
-import com.suresh.mindelements.WrongAnswerAvtivity;
+import com.wMindElements.QuestionActivity;
+import com.wMindElements.QuizActivity;
+import com.wMindElements.SingleQuestionActivity;
+import com.wMindElements.WrongAnswerAvtivity;
 
 /**
  * this class performs all the work, shows dialog before the work and dismiss it

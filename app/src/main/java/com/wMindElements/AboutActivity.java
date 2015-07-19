@@ -1,4 +1,4 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -6,6 +6,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.wMindElements.R;
 
 
 public class AboutActivity extends ActionBarActivity {

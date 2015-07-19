@@ -1,4 +1,4 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,23 +10,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.suresh.utility.HelperService;
-import com.suresh.utility.ServerRequestTask;
+//import com.suresh.mindelements.R;
+import com.wMindElements.utility.HelperService;
+import com.wMindElements.utility.ServerRequestTask;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

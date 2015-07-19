@@ -1,4 +1,4 @@
-package com.suresh.utility;
+package com.wMindElements.utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Suresh on 6/28/2015.

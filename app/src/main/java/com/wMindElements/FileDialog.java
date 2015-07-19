@@ -1,11 +1,9 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.suresh.mindelements.ListenerList.FireHandler;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -110,7 +108,7 @@ public class FileDialog {
 
     private void fireFileSelectedEvent(final File file) {
         fileListenerList
-                .fireEvent(new FireHandler<FileDialog.FileSelectedListener>() {
+                .fireEvent(new ListenerList.FireHandler<FileSelectedListener>() {
                     public void fireEvent(FileSelectedListener listener) {
                         listener.fileSelected(file);
                     }
@@ -119,7 +117,7 @@ public class FileDialog {
 
     private void fireDirectorySelectedEvent(final File directory) {
         dirListenerList
-                .fireEvent(new FireHandler<FileDialog.DirectorySelectedListener>() {
+                .fireEvent(new ListenerList.FireHandler<DirectorySelectedListener>() {
                     public void fireEvent(DirectorySelectedListener listener) {
                         listener.directorySelected(directory);
                     }

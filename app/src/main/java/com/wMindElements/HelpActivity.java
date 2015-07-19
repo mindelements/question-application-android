@@ -1,4 +1,4 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
@@ -9,6 +9,8 @@ import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+//import com.suresh.mindelements.R;
 
 
 public class HelpActivity extends ActionBarActivity {

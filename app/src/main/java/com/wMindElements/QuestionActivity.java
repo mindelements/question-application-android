@@ -1,4 +1,4 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import android.graphics.Color;
 import android.os.Environment;
@@ -15,16 +15,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.suresh.utility.HelperService;
-import com.suresh.utility.ServerRequestTask;
+//import com.suresh.mindelements.R;
+import com.wMindElements.utility.HelperService;
+import com.wMindElements.utility.ServerRequestTask;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;

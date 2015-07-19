@@ -1,4 +1,4 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+//import com.suresh.mindelements.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

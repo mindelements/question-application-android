@@ -1,4 +1,4 @@
-package com.suresh.mindelements;
+package com.wMindElements;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+//import com.suresh.mindelements.R;
 
 import java.util.HashMap;
 import java.util.List;
