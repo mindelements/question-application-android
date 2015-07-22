@@ -30,6 +30,8 @@ public class MainActivity extends ActionBarActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+
+
         /**
          * To quit from the entire application from any activities if Quit menu is pressed
          */
@@ -42,6 +44,11 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        /**
+         * Remove line below to enable quizListenTool
+         */
+        MenuItem item = menu.findItem(R.id.quizLIstenToolMenu);
+        item.setVisible(false);
         return true;
     }
 
@@ -60,6 +67,11 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent2 = new Intent(MainActivity.this, QuestionActivity.class);
                 intent2.putExtra("Activity", "quiz");
                 startActivity(intent2);
+                break;
+            case R.id.quizLIstenToolMenu:
+                Intent intentListen = new Intent(MainActivity.this, QuestionActivity.class);
+                intentListen.putExtra("Activity", "quizlisten");
+                startActivity(intentListen);
                 break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(MainActivity.this, AboutActivity.class);
@@ -96,6 +108,12 @@ public class MainActivity extends ActionBarActivity {
     public void getQuizView(View v) {
         Intent intent = new Intent(MainActivity.this, QuestionActivity.class);
         intent.putExtra("Activity", "quiz");
+        startActivity(intent);
+    }
+
+    public void getQuizListenView(View v) {
+        Intent intent = new Intent(MainActivity.this, QuestionActivity.class);
+        intent.putExtra("Activity", "quizlisten");
         startActivity(intent);
     }
 

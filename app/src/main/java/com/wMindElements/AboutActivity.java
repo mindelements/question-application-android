@@ -26,6 +26,11 @@ public class AboutActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        /**
+         * Remove line below to enable quizListenTool
+         */
+        MenuItem item = menu.findItem(R.id.quizLIstenToolMenu);
+        item.setVisible(false);
         return true;
     }
 
@@ -45,6 +50,11 @@ public class AboutActivity extends ActionBarActivity {
             case R.id.quizToolMenu:
                 Intent intent2 = new Intent(AboutActivity.this, QuizActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.quizLIstenToolMenu:
+                Intent intentListen = new Intent(AboutActivity.this, QuestionActivity.class);
+                intentListen.putExtra("Activity", "quizlisten");
+                startActivity(intentListen);
                 break;
             case R.id.aboutMenu:
                 break;

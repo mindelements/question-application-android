@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.wMindElements.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -22,38 +22,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.wMindElements.QuestionActivity"
+            android:name=".QuestionActivity"
             android:label="@string/title_activity_question"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.wMindElements.QuizActivity"
+            android:name=".QuizActivity"
             android:label="@string/title_activity_quiz"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.wMindElements.SingleQuestionActivity"
+            android:name=".SingleQuestionActivity"
             android:label="@string/title_activity_single_question"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.wMindElements.AboutActivity"
+            android:name=".AboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.wMindElements.WrongAnswerAvtivity"
+            android:name=".WrongAnswerAvtivity"
             android:label="@string/title_activity_wrong_answer_avtivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.wMindElements.QuizResultActivity"
+            android:name=".QuizResultActivity"
             android:label="@string/title_activity_quiz_result"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.wMindElements.HelpActivity"
+            android:name=".HelpActivity"
             android:label="@string/title_activity_help" >
+        </activity>
+        <activity
+            android:name=".QuizListenActivity"
+            android:label="@string/title_activity_quiz_listen" >
         </activity>
     </application>
 

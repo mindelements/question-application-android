@@ -21,6 +21,7 @@ import com.wMindElements.utility.ServerRequestTask;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -32,6 +33,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class QuestionActivity extends ActionBarActivity {
 
@@ -49,8 +52,13 @@ public class QuestionActivity extends ActionBarActivity {
         actionBar.setTitle("Question");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().getExtras() != null && getIntent().getStringExtra("Activity").equalsIgnoreCase("quiz")){
-            parent = "QUIZ";
+        String root = getIntent().getStringExtra("Activity");
+        if(getIntent().getExtras() != null){
+            if(root.equalsIgnoreCase("quiz"))
+                parent = "QUIZ";
+            else if(root.equalsIgnoreCase("quizlisten"))
+                parent = "QUIZLISTEN";
+
             TextView tv = (TextView) findViewById(R.id.textView4);
             tv.setText("Message : Practice question tool");
         }
@@ -61,6 +69,11 @@ public class QuestionActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        /**
+         * Remove line below to enable quizListenTool
+         */
+        MenuItem item = menu.findItem(R.id.quizLIstenToolMenu);
+        item.setVisible(false);
         return true;
     }
 
@@ -80,6 +93,11 @@ public class QuestionActivity extends ActionBarActivity {
                 Intent intent2 = new Intent(QuestionActivity.this, QuestionActivity.class);
                 intent2.putExtra("Activity", "quiz");
                 startActivity(intent2);
+                break;
+            case R.id.quizLIstenToolMenu:
+                Intent intentListen = new Intent(QuestionActivity.this, QuestionActivity.class);
+                intentListen.putExtra("Activity", "quizlisten");
+                startActivity(intentListen);
                 break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(QuestionActivity.this, AboutActivity.class);
@@ -167,7 +185,7 @@ public class QuestionActivity extends ActionBarActivity {
         try {
             File f = new File(fileName);
             String requestURL = "";
-            if(parent.equalsIgnoreCase("QUIZ")){
+            if(parent.equalsIgnoreCase("QUIZ") || parent.equalsIgnoreCase("QUIZLISTEN")){
                 requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//quiz/getQuizQuestions/"+memberId+"/inputFile";
             }else{
                 requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//questions/getFirstQuestion/"+memberId+"/inputFile";
@@ -190,7 +208,9 @@ public class QuestionActivity extends ActionBarActivity {
 
                 String firstResponse = EntityUtils.toString(response.getEntity());
 
-                if(parent.equalsIgnoreCase("QUIZ")){
+
+
+                if(parent.equalsIgnoreCase("QUIZ") || parent.equalsIgnoreCase("QUIZLISTEN")){
                     jsonArray = new JSONArray(firstResponse);
                     mainObject = new JSONObject();
                     mainObject.put("datas",jsonArray);
@@ -201,6 +221,18 @@ public class QuestionActivity extends ActionBarActivity {
                  * Converts JSONObject to Map
                  */
                 HashMap map  =  HelperService.jsonToMap(mainObject);
+
+                if(parent.equalsIgnoreCase("QUIZLISTEN")){
+                    List allQuestionDetails = (List) map.get("datas");
+                    Map singleQuestionDetails = (Map) allQuestionDetails.get(0);
+                    String MEMBER_NUMBER = singleQuestionDetails.get("memberNumber").toString();
+                    String SESSION_ID = singleQuestionDetails.get("sessionId").toString();
+                    submitQuizAnswersInBackground(MEMBER_NUMBER, SESSION_ID);
+                    return;
+                }
+
+
+
                 if(responseCode==201){
 
                     if(parent.equalsIgnoreCase("QUIZ")){
@@ -226,4 +258,45 @@ public class QuestionActivity extends ActionBarActivity {
             ex.printStackTrace();
         }
     }
+
+    public void submitQuizAnswersInBackground(String memberNumber , String sessionId){
+
+        JSONArray jsonArray = null;
+        JSONObject mainObject = null;
+
+        String requestURL  = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//quiz/getQuizResult/"+memberNumber+"/"+sessionId;
+        Log.d(getClass().getName(), "Submitting all answer to server of quiz------------->>URL : " + requestURL);
+        try{
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(requestURL);
+            HttpResponse response;
+            response = httpclient.execute(httpGet);
+
+            int responseCode = response.getStatusLine().getStatusCode();
+            String reponseMessage = response.getStatusLine().getReasonPhrase();
+
+            Log.d(getClass().getName(),"Response Code for Submitting Quiz  answer -------------->>"+responseCode);
+            Log.d(getClass().getName(),"Response Message Submitting Quiz answer-------------->>"+reponseMessage);
+
+            String firstResponse2 = EntityUtils.toString(response.getEntity());
+            jsonArray = new JSONArray(firstResponse2);
+            mainObject = new JSONObject();
+            mainObject.put("datas", jsonArray);
+            /**
+             * Converts JSONObject to Map
+             */
+            HashMap map  =  HelperService.jsonToMap(mainObject);
+
+            if(responseCode==201) {
+                Intent intent = new Intent(QuestionActivity.this, QuizListenActivity.class);
+                intent.putExtra("dataMap", map);
+                startActivity(intent);
+            }
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+
+    }
+
 }

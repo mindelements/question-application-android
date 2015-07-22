@@ -10,4 +10,6 @@
     <string name="title_activity_wrong_answer_avtivity">WrongAnswerAvtivity</string>
     <string name="title_activity_quiz_result">QuizResultActivity</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_quiz_listen">QuizListenActivity</string>
+    <string name="quizListenTitle"><u>Quiz questions and answers</u></string>
 </resources>
