@@ -215,12 +215,8 @@ public class SingleQuestionActivity extends ActionBarActivity {
     }
 
     public void displayUploadNewQuestionView(){
-
         View b = findViewById(R.id.gridLayout);
-        View c = findViewById(R.id.questionLabel);
-//        View d = findViewById(R.id.textView6);
-        b.setVisibility(View.GONE);c.setVisibility(View.GONE);/*d.setVisibility(View.GONE);*/
-
+        b.setVisibility(View.INVISIBLE);
         LinearLayout ll = (LinearLayout)findViewById(R.id.linearLayout2);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setPadding(15, 5, 0, 0);
