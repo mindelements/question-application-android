@@ -1,0 +1,139 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="@drawable/bg_image"
+    android:id="@+id/main">
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Question Tool"
+        android:onClick="getQuestionView"
+        android:id="@+id/questionButton"
+        android:textAllCaps="false"
+        android:layout_marginTop="48dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"/>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Quiz Tool"
+        android:paddingBottom="10dp"
+        android:id="@+id/quizButton"
+        android:onClick="getQuizView"
+        android:textAllCaps="false"
+        android:layout_below="@+id/questionButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Quiz Listen Tool"
+        android:paddingBottom="10dp"
+        android:id="@+id/quizListenButton"
+        android:onClick="getQuizListenView"
+        android:visibility="gone"
+        android:textAllCaps="false"
+        android:layout_below="@+id/quizButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please find below tools:"
+        android:id="@+id/textView"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="27dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(c) support@mindelements.net "
+        android:id="@+id/textView2"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/footer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(w) www.mindelements.net"
+        android:id="@+id/textView3"
+        android:textColor="#FFFFFF"
+        android:layout_above="@+id/textView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"/>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#06468E"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Copyright © 2015"
+            android:textColor="#16A085"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Copy Question-Template.xslx to Downloads folder"
+        android:id="@+id/textView8"
+        android:textColor="#FFFFFF"
+        android:layout_below="@+id/quizListenButton"
+        android:layout_alignLeft="@+id/quizListenButton"
+        android:layout_alignStart="@+id/quizListenButton"
+        android:layout_marginTop="44dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Copy"
+        android:onClick="copyTemplate"
+        android:id="@+id/copyButton"
+        android:textAllCaps="false"
+        android:layout_below="@id/textView8"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_alignRight="@+id/quizListenButton"
+        android:layout_alignEnd="@+id/quizListenButton" />
+</RelativeLayout>
+
+
+<!-- From: file:/C:/mobileapps/suresh/question-tool-v5/question-application-android/app/src/main/res/layout/activity_main.xml -->

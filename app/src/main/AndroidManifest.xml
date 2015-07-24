@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wMindElements" >
+    package="net.mindelements.thinker">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="net.mindelements.thinker.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -22,41 +22,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".QuestionActivity"
+            android:name="net.mindelements.thinker.QuestionActivity"
             android:label="@string/title_activity_question"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".QuizActivity"
+            android:name="net.mindelements.thinker.QuizActivity"
             android:label="@string/title_activity_quiz"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".SingleQuestionActivity"
+            android:name="net.mindelements.thinker.SingleQuestionActivity"
             android:label="@string/title_activity_single_question"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name="net.mindelements.thinker.AboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".WrongAnswerAvtivity"
+            android:name="net.mindelements.thinker.WrongAnswerAvtivity"
             android:label="@string/title_activity_wrong_answer_avtivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".QuizResultActivity"
+            android:name="net.mindelements.thinker.QuizResultActivity"
             android:label="@string/title_activity_quiz_result"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".HelpActivity"
+            android:name="net.mindelements.thinker.HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
         <activity
-            android:name=".QuizListenActivity"
+            android:name="net.mindelements.thinker.QuizListenActivity"
             android:label="@string/title_activity_quiz_listen" >
         </activity>
     </application>

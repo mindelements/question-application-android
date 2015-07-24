@@ -5,10 +5,10 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.suresh.mindelements"
+        applicationId "net.mindelements.thinker"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
+        versionCode 72420151
         versionName "1.0"
     }
     buildTypes {
