@@ -137,8 +137,6 @@ public class QuizListenActivity extends ActionBarActivity {
             label.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String toSpeak = "hello";
-                    Toast.makeText(getApplicationContext(), toSpeak, Toast.LENGTH_SHORT).show();
                     new ServerRequestTask().execute("speak",speechQuestion,speechOptions[0],speechOptions[1],speechOptions[2],speechOptions[3],speechAnswer);
                 }
             });
@@ -154,11 +152,6 @@ public class QuizListenActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        /**
-         * Remove line below to enable quizListenTool
-         */
-        MenuItem item = menu.findItem(R.id.quizLIstenToolMenu);
-        item.setVisible(false);
         return true;
     }
 
@@ -228,7 +221,6 @@ public class QuizListenActivity extends ActionBarActivity {
                 case "speak":
                     for(int i=1 ; i<=6 ;i++){
                         speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
-//                        speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
                         if(i==6){
                             speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
                         }else{

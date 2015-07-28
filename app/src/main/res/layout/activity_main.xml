@@ -42,7 +42,6 @@
         android:paddingBottom="10dp"
         android:id="@+id/quizListenButton"
         android:onClick="getQuizListenView"
-        android:visibility="gone"
         android:textAllCaps="false"
         android:layout_below="@+id/quizButton"
         android:layout_alignParentLeft="true"
@@ -131,8 +130,8 @@
         android:layout_below="@id/textView8"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
-        android:layout_alignRight="@+id/quizListenButton"
-        android:layout_alignEnd="@+id/quizListenButton" />
+        android:layout_alignRight="@+id/quizButton"
+        android:layout_alignEnd="@+id/quizButton" />
 </RelativeLayout>
 
 
