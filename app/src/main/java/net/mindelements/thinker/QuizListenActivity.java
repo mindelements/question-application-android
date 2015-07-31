@@ -8,10 +8,14 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.method.KeyListener;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 
 import net.mindelements.thinker.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -69,8 +74,16 @@ public class QuizListenActivity extends ActionBarActivity {
             Map quizResult = (Map) quizResultList.get(k);
             Map<String,String> selection = (Map)quizResult.get("selection");
 
+            final List<String> textToSpeakList = new ArrayList<String>();
+            /**
+             * Add speak in 1st determine speak case
+             */
+            textToSpeakList.add("speak");
             final String speechQuestion = "Question number "+(dataSize-QUESTION_COUNTER)+" , "+quizResult.get("question").toString();
-            final String[] speechOptions = new String[4];
+            /**
+             * Add question secondly
+             */
+            textToSpeakList.add(speechQuestion);
 
             String questionType = quizResult.get("questionType").toString();
             String temp = "" ;
@@ -88,17 +101,20 @@ public class QuizListenActivity extends ActionBarActivity {
                 temp = "The answer are , "+sb.toString();
             }
 
-            final String speechAnswer = temp;
+
             final String question = (dataSize-QUESTION_COUNTER)+"."+quizResult.get("question").toString();
             StringBuilder optionBuilder = new StringBuilder();
             int countOption = 0;
             for (Map.Entry<String, String> entry : selection.entrySet()) {
-                speechOptions[countOption] = entry.getKey()+" , "+entry.getValue();
+                textToSpeakList.add(entry.getKey()+" , "+entry.getValue());
                 countOption++;
                 optionBuilder.append(entry.getKey() + " : " + entry.getValue());
                 if(countOption<4)
                     optionBuilder.append("\n");
             }
+
+            final String speechAnswer = temp;
+            textToSpeakList.add(speechAnswer);
 
             String options = optionBuilder.toString();
             String actualAnswer = "Answer : "+quizResult.get("answer").toString()+"\n\n";
@@ -128,19 +144,33 @@ public class QuizListenActivity extends ActionBarActivity {
             TableRow questionRow = new TableRow(this);
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
             questionRow.setLayoutParams(lp);
-            Button label = new Button(this);
-            label.setText("Read");
-            label.setPadding(10, 0, 0, 0);
-            label.setTextColor(Color.rgb(255, 255, 255));
-            label.setWidth(200);
-            label.setTextSize(18);
-            label.setOnClickListener(new View.OnClickListener() {
+            Button readButton = new Button(this);
+            readButton.setText("Play");
+            readButton.setPadding(10, 0, 0, 0);
+            readButton.setTextColor(Color.rgb(255, 255, 255));
+            readButton.setWidth(200);
+            readButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new ServerRequestTask().execute("speak",speechQuestion,speechOptions[0],speechOptions[1],speechOptions[2],speechOptions[3],speechAnswer);
+                    new ServerRequestTask().execute(textToSpeakList.toArray(new String[textToSpeakList.size()]));
                 }
             });
-            questionRow.addView(label);
+            Button stopButton = new Button(this);
+            stopButton.setText("Stop");
+            stopButton.setWidth(200);
+            stopButton.setTextColor(Color.rgb(255, 255, 255));
+            stopButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    speaker.stop();
+//                    speaker.shutdown();
+
+                }
+            });
+            LinearLayout ll2 = new LinearLayout(this);
+            ll2.addView(readButton);
+            ll2.addView(stopButton);
+            questionRow.addView(ll2);
             ll.addView(questionRow, i);
             i++;
             k++;
@@ -189,11 +219,32 @@ public class QuizListenActivity extends ActionBarActivity {
                 break;
             case android.R.id.home:
                 onBackPressed();
+                speaker.shutdown();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        speaker.shutdown();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void stopPlaying(View v){
+        speaker.stop();
+    }
+
+    public void playAllQuestionAnswers(View v){
+
     }
 
     public class ServerRequestTask extends AsyncTask<String, Void, String> {

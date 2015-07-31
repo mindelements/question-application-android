@@ -23,7 +23,8 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/aboutLabel"
         android:id="@+id/quizScrollView"
-        android:layout_above="@+id/footer">
+        android:fillViewport="false"
+        android:layout_above="@+id/playAllButton">
         <TableLayout
             android:id="@+id/mainTable"
             android:layout_width="fill_parent"
@@ -35,6 +36,27 @@
 
 
     </ScrollView>
+
+    <Button android:id="@+id/playAllButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Play All"
+        android:minWidth="150dp"
+        android:onClick="playAllQuestionAnswers"
+        android:textAllCaps="false"
+        android:layout_alignTop="@+id/stopAllButton"
+        android:layout_alignLeft="@+id/aboutLabel"
+        android:layout_alignStart="@+id/aboutLabel" />
+    <Button android:id="@+id/stopAllButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Stop"
+        android:minWidth="150dp"
+        android:onClick="stopPlaying"
+        android:textAllCaps="false"
+        android:layout_above="@+id/footer"
+        android:layout_toRightOf="@+id/playAllButton"
+        android:layout_toEndOf="@+id/playAllButton" />
 
     <RelativeLayout
         android:id="@+id/footer"
