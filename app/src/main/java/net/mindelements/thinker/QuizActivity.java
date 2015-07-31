@@ -11,8 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -46,8 +48,11 @@ public class QuizActivity extends ActionBarActivity {
     Map<String,String> selection;
     Map<String,String> revSelection;
     TableLayout tableLayout;
-    int QUESTION_COUNTER = 0;
+    int QUESTION_COUNTER = 1;
     int dataSize;
+
+    ScrollView sv;
+    LinearLayout ll4;
 
 
     @Override
@@ -72,6 +77,9 @@ public class QuizActivity extends ActionBarActivity {
 
         Log.d(getClass().getName(), "Selected ID:  " + allQuestionDetails);
 
+        sv = new ScrollView(this);
+        ll4 = new LinearLayout(this);
+        ll4.setOrientation(LinearLayout.VERTICAL);
 
         int i=0;
         for(Object m : allQuestionDetails){
@@ -88,13 +96,16 @@ public class QuizActivity extends ActionBarActivity {
                 revSelection.put(entry.getValue(), entry.getKey());
 
             if(QUESTION_TYPE.equalsIgnoreCase("single")){
-                addRadioButtons(singleQuestionDetails,selection,revSelection,QUESTION_NUMBER);
+                addRadioButtons(singleQuestionDetails,selection,revSelection,QUESTION_NUMBER,i);
             }else{
                 List answerList = new ArrayList();
-                addCheckBoxes(singleQuestionDetails,selection,revSelection,answerList,QUESTION_NUMBER);
+                addCheckBoxes(singleQuestionDetails,selection,revSelection,answerList,QUESTION_NUMBER,i);
             }
             i++;
         }
+        sv.addView(ll4);
+        LinearLayout ll2 = (LinearLayout)findViewById(R.id.linearLayout2);
+        ll2.addView(sv);
 
     }
 
@@ -154,34 +165,28 @@ public class QuizActivity extends ActionBarActivity {
     /**
      * For displaying radio button for question with single answer
      */
-    public void addRadioButtons(Map singleQuestionDetails,final Map selection,final Map revSelection,final String questionNumber) {
-        TableLayout ll = (TableLayout) findViewById(R.id.mainTable);
-        int i=0;
-        /**
-         * Row for question
-         */
-        TableRow questionRow = new TableRow(this);
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-        questionRow.setLayoutParams(lp);
+    public void addRadioButtons(Map singleQuestionDetails,final Map selection,final Map revSelection,final String questionNumber,int location) {
+
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+
         TextView questionLabel = new TextView(this);
-        questionLabel.setText((dataSize - QUESTION_COUNTER) + "." + singleQuestionDetails.get("question").toString());
+        questionLabel.setText(QUESTION_COUNTER+ "." + singleQuestionDetails.get("question").toString());
         questionLabel.setPadding(10, 0, 0, 0);
+        questionLabel.setTextSize(16);
         questionLabel.setTextColor(Color.rgb(255, 255, 255));
-        questionLabel.setTextSize(20);
-        questionLabel.setWidth(getWindowManager().getDefaultDisplay().getWidth()-10);
-        questionRow.addView(questionLabel);
-        ll.addView(questionRow,i);
-        i++;
+        ll.addView(questionLabel);
 
         RadioGroup rg = new RadioGroup(this);
-        int k = 99;
-        for(Object key : selection.keySet()){
+        int counterForId = 99;
+        for(Object key:selection.keySet()){
             RadioButton rdbtn = new RadioButton(this);
-            rdbtn.setId((1 * 2) + k);
+            rdbtn.setId((1 * 2) + counterForId);
             rdbtn.setText(selection.get(key.toString()).toString());
             rg.addView(rdbtn);
-            k--;
+            counterForId--;
         }
+
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
@@ -195,11 +200,8 @@ public class QuizActivity extends ActionBarActivity {
             }
         });
 
-        TableRow row= new TableRow(this);
-        TableRow.LayoutParams lp2 = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-        row.setLayoutParams(lp2);
-        row.addView(rg);
-        ll.addView(row,i);
+        ll.addView(rg);
+        ll4.addView(ll,location);
         QUESTION_COUNTER++;
     }
 
@@ -207,35 +209,24 @@ public class QuizActivity extends ActionBarActivity {
     /**
      * For displaying checkbox button for question with multiple answer
      */
-    public void addCheckBoxes(Map singleQuestionDetails,final Map selection,final Map revSelection,final List answerList,final String questionNumber) {
+    public void addCheckBoxes(Map singleQuestionDetails,final Map selection,final Map revSelection,final List answerList,final String questionNumber,int location) {
 
-        final TableLayout ll = (TableLayout) findViewById(R.id.mainTable);
-        int i=0;
-        String answer = "";
-        /**
-         * Row for question
-         */
-        TableRow questionRow = new TableRow(this);
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-        questionRow.setLayoutParams(lp);
+        LinearLayout ll = new LinearLayout(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
+
         TextView questionLabel = new TextView(this);
-        questionLabel.setText((dataSize-QUESTION_COUNTER)+"."+singleQuestionDetails.get("question").toString());
+        questionLabel.setText(QUESTION_COUNTER + "." + singleQuestionDetails.get("question").toString());
         questionLabel.setPadding(10, 0, 0, 0);
+        questionLabel.setTextSize(16);
         questionLabel.setTextColor(Color.rgb(255, 255, 255));
-        questionLabel.setTextSize(20);
-        questionLabel.setHorizontallyScrolling(false);
-        questionRow.addView(questionLabel);
-        ll.addView(questionRow, i);
-        i++;
+        ll.addView(questionLabel);
 
-//        ANSWER = "";
+        int counterForId=0;
         for(Object key : selection.keySet()){
             CheckBox cb = new CheckBox(this);
             cb.setText(selection.get(key.toString()).toString());
-            cb.setId(i + 6);
-
+            cb.setId(counterForId + 6);
             cb.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     String value = (String) ((CheckBox) v).getText();
@@ -246,15 +237,17 @@ public class QuizActivity extends ActionBarActivity {
                     } else {
                         answerList.remove(revSelection.get(value));
                     }
-                    ANSWER = TextUtils.join(",",answerList);
+                    ANSWER = TextUtils.join(",", answerList);
                     uploadAnswerToServer(questionNumber);
                     Log.d(getClass().getName(), "ANSWER-------------->> " + answerList);
 
                 }
             });
-            ll.addView(cb,i);
+            ll.addView(cb);
         }
-    QUESTION_COUNTER++;
+
+        ll4.addView(ll,location);
+        QUESTION_COUNTER++;
     }
 
 
