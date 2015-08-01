@@ -272,6 +272,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
             RadioButton rdbtn = new RadioButton(this);
             rdbtn.setId((1 * 2) + i);
             rdbtn.setText(selection.get(key.toString()).toString());
+            rdbtn.setTextColor(Color.WHITE);
             rg.addView(rdbtn);
         }
         ll.addView(rg);
@@ -300,6 +301,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
             i++;
             CheckBox cb = new CheckBox(this);
             cb.setText(selection.get(key.toString()).toString());
+            cb.setTextColor(Color.WHITE);
             cb.setId(i + 6);
             ll.addView(cb);
         }

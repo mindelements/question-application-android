@@ -183,6 +183,7 @@ public class QuizActivity extends ActionBarActivity {
             RadioButton rdbtn = new RadioButton(this);
             rdbtn.setId((1 * 2) + counterForId);
             rdbtn.setText(selection.get(key.toString()).toString());
+            rdbtn.setTextColor(Color.WHITE);
             rg.addView(rdbtn);
             counterForId--;
         }
@@ -225,6 +226,7 @@ public class QuizActivity extends ActionBarActivity {
         for(Object key : selection.keySet()){
             CheckBox cb = new CheckBox(this);
             cb.setText(selection.get(key.toString()).toString());
+            cb.setTextColor(Color.WHITE);
             cb.setId(counterForId + 6);
             cb.setOnClickListener(new View.OnClickListener() {
                 @Override
