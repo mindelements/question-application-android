@@ -26,7 +26,10 @@ import android.widget.Toast;
 import net.mindelements.thinker.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,10 +39,9 @@ import java.util.TreeMap;
 public class QuizListenActivity extends ActionBarActivity {
 
     TableLayout tableLayout;
-    int totalCorrectAnswerCount = 0;
-    int QUESTION_COUNTER = 0;
     int dataSize;
     TextToSpeech speaker;
+    List tempQuizResultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class QuizListenActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         /**
-         * Initialis TextToSpeech instance
+         * Initialise TextToSpeech instance
          */
         speaker=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -67,12 +69,20 @@ public class QuizListenActivity extends ActionBarActivity {
         Intent intent = getIntent();
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
         List quizResultList = (List) hashMap.get("datas");
+        tempQuizResultList = quizResultList;
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
         dataSize = quizResultList.size();
 
+        Collections.sort(quizResultList, new Comparator<Map<String, Integer>>() {
+            @Override
+            public int compare(Map<String, Integer> o1, Map<String, Integer> o2) {
+                return o1.get("questionNumber").compareTo(o2.get("questionNumber"));
+            }
+        });
+
         int k=0;
         for(Object m : quizResultList){
-            Map quizResult = (Map) quizResultList.get(k);
+            Map quizResult = (Map) m;
             Map<String,String> selection = (Map)quizResult.get("selection");
 
             final List<String> textToSpeakList = new ArrayList<String>();
@@ -80,7 +90,7 @@ public class QuizListenActivity extends ActionBarActivity {
              * Add speak in 1st determine speak case
              */
             textToSpeakList.add("speak");
-            final String speechQuestion = "Question number "+(dataSize-QUESTION_COUNTER)+" , "+quizResult.get("question").toString();
+            final String speechQuestion = "Question number "+(quizResult.get("questionNumber").toString())+" , "+quizResult.get("question").toString();
             /**
              * Add question secondly
              */
@@ -103,7 +113,7 @@ public class QuizListenActivity extends ActionBarActivity {
             }
 
 
-            final String question = (dataSize-QUESTION_COUNTER)+"."+quizResult.get("question").toString();
+            final String question = (quizResult.get("questionNumber").toString())+"."+quizResult.get("question").toString();
             StringBuilder optionBuilder = new StringBuilder();
             int countOption = 0;
             Map<String, String> sortedOptions = new TreeMap<String, String>(selection);
@@ -126,7 +136,6 @@ public class QuizListenActivity extends ActionBarActivity {
             /**
              * Row for question
              */
-            int i = 0;
             for(String item : displayItem){
                 TableRow questionRow = new TableRow(this);
                 TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
@@ -139,8 +148,8 @@ public class QuizListenActivity extends ActionBarActivity {
 
                 label.setTextSize(18);
                 questionRow.addView(label);
-                ll.addView(questionRow, i);
-                i++;
+                ll.addView(questionRow, k);
+                k++;
             }
 
             TableRow questionRow = new TableRow(this);
@@ -165,18 +174,14 @@ public class QuizListenActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     speaker.stop();
-//                    speaker.shutdown();
-
                 }
             });
             LinearLayout ll2 = new LinearLayout(this);
             ll2.addView(readButton);
             ll2.addView(stopButton);
             questionRow.addView(ll2);
-            ll.addView(questionRow, i);
-            i++;
+            ll.addView(questionRow, k);
             k++;
-            QUESTION_COUNTER++;
         }
     }
 
@@ -247,6 +252,66 @@ public class QuizListenActivity extends ActionBarActivity {
 
     public void playAllQuestionAnswers(View v){
 
+        int k = 0;
+        Collections.sort(tempQuizResultList, new Comparator<Map<String, Integer>>() {
+            @Override
+            public int compare(Map<String, Integer> o1, Map<String, Integer> o2) {
+                return o1.get("questionNumber").compareTo(o2.get("questionNumber"));
+            }
+        });
+        for(Object m : tempQuizResultList){
+            Map quizResult = (Map) tempQuizResultList.get(k);
+            Map<String,String> selection = (Map)quizResult.get("selection");
+
+            System.out.println("quizResult = " + quizResult);
+
+            final List<String> textToSpeakList = new ArrayList<String>();
+            /**
+             * Add speak in 1st determine speak case
+             */
+            textToSpeakList.add("speak");
+            final String speechQuestion = "Question number "+quizResult.get("questionNumber")+" , "+quizResult.get("question").toString();
+            /**
+             * Add question secondly
+             */
+            textToSpeakList.add(speechQuestion);
+
+            String questionType = quizResult.get("questionType").toString();
+            String temp = "" ;
+
+            if(questionType.equalsIgnoreCase("single")){
+                String correctOption = quizResult.get("answer").toString();
+                String tempSpeechAnswer = selection.get(correctOption);
+                temp = "The answer is , "+quizResult.get("answer").toString()+" , "+tempSpeechAnswer;
+            }else{
+                String[] answers = quizResult.get("answer").toString().split(",");
+                StringBuilder sb = new StringBuilder();
+                for(String ans : answers){
+                    sb.append(ans+" , "+selection.get(ans)+" ");
+                }
+                temp = "The answer are , "+sb.toString();
+            }
+
+
+            StringBuilder optionBuilder = new StringBuilder();
+            int countOption = 0;
+            Map<String, String> sortedOptions = new TreeMap<String, String>(selection);
+            for (Map.Entry<String, String> entry : sortedOptions.entrySet()) {
+                textToSpeakList.add(entry.getKey()+" , "+entry.getValue());
+                countOption++;
+                optionBuilder.append(entry.getKey() + " : " + entry.getValue());
+                if(countOption<4)
+                    optionBuilder.append("\n");
+            }
+
+            final String speechAnswer = temp;
+            textToSpeakList.add(speechAnswer);
+
+            new ServerRequestTask().execute(textToSpeakList.toArray(new String[textToSpeakList.size()]));
+            k++;
+        }
+
+
     }
 
     public class ServerRequestTask extends AsyncTask<String, Void, String> {
@@ -281,6 +346,16 @@ public class QuizListenActivity extends ActionBarActivity {
                         }
                     }
                     break;
+                case "a":
+                    for(int i=1 ; i<=5 ;i++){
+                        speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
+                        if(i==6){
+                            speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
+                        }else{
+                            speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
+                        }
+                    }
+
 
                 default:
                     break;
