@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 public class QuizListenActivity extends ActionBarActivity {
@@ -105,7 +106,8 @@ public class QuizListenActivity extends ActionBarActivity {
             final String question = (dataSize-QUESTION_COUNTER)+"."+quizResult.get("question").toString();
             StringBuilder optionBuilder = new StringBuilder();
             int countOption = 0;
-            for (Map.Entry<String, String> entry : selection.entrySet()) {
+            Map<String, String> sortedOptions = new TreeMap<String, String>(selection);
+            for (Map.Entry<String, String> entry : sortedOptions.entrySet()) {
                 textToSpeakList.add(entry.getKey()+" , "+entry.getValue());
                 countOption++;
                 optionBuilder.append(entry.getKey() + " : " + entry.getValue());
