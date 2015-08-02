@@ -38,7 +38,7 @@ public class HelpActivity extends ActionBarActivity {
         requestView.setMovementMethod(LinkMovementMethod.getInstance());
 
         description.setText("Mind Elements App is a collection of tools targeted towards helping users or students to learn new things. If the user have internal or external certifications that needs to be passed in a company, or a course that needs to be learned quickly in order to pass the exams, the tools provided here will help accomplish that.");
-        description2.setText("The Mind Elements App currently offers two tools:\n" +Html.fromHtml("&#x25C6;")+" Question Tool\n"  +Html.fromHtml("&#x25C6;")+" Quiz Tool");
+        description2.setText("The Mind Elements App currently offers three tools:\n" +Html.fromHtml("&#x25C6;")+" Question Tool\n"  +Html.fromHtml("&#x25C6;")+" Quiz Tool\n"  +Html.fromHtml("&#x25C6;")+" Quiz Listen Tool");
 
         emailView.setText(Html.fromHtml("<a href=\"mailto:support@mindelements.net\">support@mindelements.net</a>"));
         emailView.setMovementMethod(LinkMovementMethod.getInstance());

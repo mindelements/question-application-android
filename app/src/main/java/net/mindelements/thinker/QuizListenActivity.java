@@ -43,6 +43,7 @@ public class QuizListenActivity extends ActionBarActivity {
     int dataSize;
     TextToSpeech speaker;
     List tempQuizResultList;
+    int sizeForRead = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class QuizListenActivity extends ActionBarActivity {
                 textToSpeakList.add(entry.getKey()+" , "+entry.getValue());
                 countOption++;
                 optionBuilder.append(entry.getKey() + " : " + entry.getValue());
-                if(countOption<4)
+                if(countOption<selection.size())
                     optionBuilder.append("\n");
             }
 
@@ -161,6 +162,11 @@ public class QuizListenActivity extends ActionBarActivity {
             readButton.setPadding(10, 0, 0, 0);
             readButton.setTextColor(Color.rgb(255, 255, 255));
             readButton.setWidth(200);
+            sizeForRead = textToSpeakList.size();
+
+
+            System.out.println("textToSpeakList = " + textToSpeakList);
+            System.out.println("textToSpeakList = " + textToSpeakList.size());
             readButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -326,26 +332,15 @@ public class QuizListenActivity extends ActionBarActivity {
 
             switch (invokingMethod) {
                 case "speak":
-                    for(int i=1 ; i<=6 ;i++){
+                    for(int i=1 ; i<=sizeForRead-1 ;i++){
                         speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
-                        if(i==6){
+                        if(i==sizeForRead-1){
                             speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
                         }else{
                             speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
                         }
                     }
                     break;
-                case "a":
-                    for(int i=1 ; i<=5 ;i++){
-                        speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
-                        if(i==6){
-                            speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
-                        }else{
-                            speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
-                        }
-                    }
-
-
                 default:
                     break;
             }
