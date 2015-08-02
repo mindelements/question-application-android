@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -232,18 +233,6 @@ public class QuizListenActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        speaker.shutdown();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     public void stopPlaying(View v){
