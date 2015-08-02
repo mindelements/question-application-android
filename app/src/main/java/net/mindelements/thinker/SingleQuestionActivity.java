@@ -1,5 +1,6 @@
 package net.mindelements.thinker;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -37,14 +38,11 @@ import java.util.Map;
 
 public class SingleQuestionActivity extends ActionBarActivity {
 
-    TextView questionNumberLabel;
-    TextView questionSetTotalValueLabel;
-    TextView totalQuestionLabel;
-    TextView numberOfSetsDoneLabel;
     TextView answerLabel;
     Button nextQuestionButton;
     Map<String,String> selection;
     Map<String,String> revSelection;
+    Map questionBucketDetails;
 
     TextView questionLabel;
 
@@ -72,17 +70,13 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
-        Map questionBucketDetails = (Map) hashMap.get("questionBucketDetails");
+        questionBucketDetails = (Map) hashMap.get("questionBucketDetails");
 
         Log.d(getClass().getName(), "Data Map inside SingleQuestionActivity------>>"+hashMap);
 
         /**
          * Initialisation of variables
          */
-        questionNumberLabel = (TextView) findViewById(R.id.questionNumberLabel);
-        questionSetTotalValueLabel = (TextView) findViewById(R.id.questionSetTotalValueLabel);
-        totalQuestionLabel = (TextView) findViewById(R.id.totalQuestionLabel);
-        numberOfSetsDoneLabel = (TextView) findViewById(R.id.numberOfSetsDoneLabel);
         answerLabel = (TextView) findViewById(R.id.answerLabel);
         nextQuestionButton = (Button) findViewById(R.id.nextQuestionButton);
 
@@ -97,14 +91,6 @@ public class SingleQuestionActivity extends ActionBarActivity {
         revSelection = new HashMap<String,String>();
         for(Map.Entry<String,String> entry : selection.entrySet())
             revSelection.put(entry.getValue(), entry.getKey());
-
-        /**
-         * Set text to the labels initiated earlier
-         */
-        questionNumberLabel.setText("Question number : "+questionBucketDetails.get("questionNumber"));
-        questionSetTotalValueLabel.setText("Question set total value : "+questionBucketDetails.get("questionSetTotalValue"));
-        totalQuestionLabel.setText("Total question : " + questionBucketDetails.get("totalQuestion"));
-        numberOfSetsDoneLabel.setText("Number of sets done : " + questionBucketDetails.get("numberOfSetsDone"));
 
         if(QUESTION_TYPE.equals("")){
             if(QUESTION_STATUS.equalsIgnoreCase("QUESTION_SET_TOTAL_REACHED")){
@@ -306,6 +292,37 @@ public class SingleQuestionActivity extends ActionBarActivity {
             ll.addView(cb);
         }
         ll2.addView(sv);
+    }
+
+    public void getQuestionDetails(View v){
+
+        final Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.background_floating_material_dark);
+        dialog.setContentView(R.layout.question_details);
+        dialog.setTitle("Details");
+        /**
+         * Initialisation of variables
+         */
+        TextView questionNumberLabel = (TextView) dialog.findViewById(R.id.questionNumberLabel);
+        TextView questionSetTotalValueLabel = (TextView) dialog.findViewById(R.id.questionSetTotalValueLabel);
+        TextView totalQuestionLabel = (TextView) dialog.findViewById(R.id.totalQuestionLabel);
+        TextView numberOfSetsDoneLabel = (TextView) dialog.findViewById(R.id.numberOfSetsDoneLabel);
+        /**
+         * Set text to the labels initiated earlier
+         */
+        questionNumberLabel.setText("Question number : "+questionBucketDetails.get("questionNumber"));
+        questionSetTotalValueLabel.setText("Question set total value : "+questionBucketDetails.get("questionSetTotalValue"));
+        totalQuestionLabel.setText("Total question : " + questionBucketDetails.get("totalQuestion"));
+        numberOfSetsDoneLabel.setText("Number of sets done : " + questionBucketDetails.get("numberOfSetsDone"));
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     public void reviewAllAnswer(View v){

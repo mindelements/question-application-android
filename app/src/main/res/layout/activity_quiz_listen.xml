@@ -8,7 +8,7 @@
     tools:context="net.mindelements.thinker.QuizResultActivity">
 
 
-    <TextView android:text="@string/quizListenTitle"
+    <TextView android:text="Quiz Listen Tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -45,8 +45,10 @@
         android:onClick="playAllQuestionAnswers"
         android:textAllCaps="false"
         android:layout_alignTop="@+id/stopAllButton"
-        android:layout_alignLeft="@+id/aboutLabel"
-        android:layout_alignStart="@+id/aboutLabel" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp" />
     <Button android:id="@+id/stopAllButton"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"

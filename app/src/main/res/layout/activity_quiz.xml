@@ -8,7 +8,7 @@
     tools:context="net.mindelements.thinker.QuizActivity"
     android:id="@+id/quizView">
 
-    <TextView android:text="Questions"
+    <TextView android:text="Quiz Tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -17,23 +17,7 @@
         android:id="@+id/aboutLabel"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-    <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/aboutLabel"-->
-        <!--android:layout_above="@+id/submitAll"-->
-        <!--android:id="@+id/quizScrollView">-->
-        <!--<TableLayout-->
-            <!--android:id="@+id/mainTable"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:stretchColumns="1"-->
-            <!-->-->
-            <!--&lt;!&ndash; everything you already have &ndash;&gt;-->
-        <!--</TableLayout>-->
 
-
-    <!--</ScrollView>-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
