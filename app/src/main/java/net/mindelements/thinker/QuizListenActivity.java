@@ -43,7 +43,6 @@ public class QuizListenActivity extends ActionBarActivity {
     int dataSize;
     TextToSpeech speaker;
     List tempQuizResultList;
-    int sizeForRead = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,11 +161,12 @@ public class QuizListenActivity extends ActionBarActivity {
             readButton.setPadding(10, 0, 0, 0);
             readButton.setTextColor(Color.rgb(255, 255, 255));
             readButton.setWidth(200);
-            sizeForRead = textToSpeakList.size();
+            int sizeForRead = textToSpeakList.size()-1;
+            /**
+             * Add array size to last index to make it dynamic
+             */
+            textToSpeakList.add(String.valueOf(sizeForRead));
 
-
-            System.out.println("textToSpeakList = " + textToSpeakList);
-            System.out.println("textToSpeakList = " + textToSpeakList.size());
             readButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -301,6 +301,11 @@ public class QuizListenActivity extends ActionBarActivity {
 
             final String speechAnswer = temp;
             textToSpeakList.add(speechAnswer);
+            int sizeForRead = textToSpeakList.size()-1;
+            /**
+             * Add array size to last index to make it dynamic
+             */
+            textToSpeakList.add(String.valueOf(sizeForRead));
 
             new ServerRequestTask().execute(textToSpeakList.toArray(new String[textToSpeakList.size()]));
             k++;
@@ -329,12 +334,17 @@ public class QuizListenActivity extends ActionBarActivity {
         protected String doInBackground(String... params) {
             String invokingMethod = params[0];
             String returnValue = "";
+            /**
+             * ArraySize is added to last index of params to make number of
+             * String value to be spoken dynamic
+             */
+            int arraySize = Integer.valueOf(params[params.length-1]);
 
             switch (invokingMethod) {
                 case "speak":
-                    for(int i=1 ; i<=sizeForRead-1 ;i++){
+                    for(int i=1 ; i<=arraySize ;i++){
                         speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
-                        if(i==sizeForRead-1){
+                        if(i==arraySize){
                             speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
                         }else{
                             speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
