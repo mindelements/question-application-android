@@ -114,6 +114,12 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void getFlashCardListenView(View v) {
+        Intent intent = new Intent(MainActivity.this, QuestionActivity.class);
+        intent.putExtra("Activity", "flashcard");
+        startActivity(intent);
+    }
+
     /**
      * Copy sample template file inside asset folder to Download folder
      * @param v

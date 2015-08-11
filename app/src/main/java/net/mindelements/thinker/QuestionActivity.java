@@ -59,6 +59,8 @@ public class QuestionActivity extends ActionBarActivity {
                 parent = "QUIZ";
             else if(root.equalsIgnoreCase("quizlisten"))
                 parent = "QUIZLISTEN";
+            else if(root.equalsIgnoreCase("flashcard"))
+                parent = "FLASHCARD";
 
             TextView tv = (TextView) findViewById(R.id.textView4);
             tv.setText("Message : Practice question tool");
@@ -94,6 +96,11 @@ public class QuestionActivity extends ActionBarActivity {
                 Intent intentListen = new Intent(QuestionActivity.this, QuestionActivity.class);
                 intentListen.putExtra("Activity", "quizlisten");
                 startActivity(intentListen);
+                break;
+            case R.id.flashCardToolMenu:
+                Intent flashCard = new Intent(QuestionActivity.this, QuestionActivity.class);
+                flashCard.putExtra("Activity", "flashcard");
+                startActivity(flashCard);
                 break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(QuestionActivity.this, AboutActivity.class);
@@ -181,7 +188,7 @@ public class QuestionActivity extends ActionBarActivity {
         try {
             File f = new File(fileName);
             String requestURL = "";
-            if(parent.equalsIgnoreCase("QUIZ") || parent.equalsIgnoreCase("QUIZLISTEN")){
+            if(parent.equalsIgnoreCase("QUIZ") || parent.equalsIgnoreCase("QUIZLISTEN") || parent.equalsIgnoreCase("FLASHCARD")){
                 requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//quiz/getQuizQuestions/"+memberId+"/inputFile";
             }else{
                 requestURL = "https://portal-mindelements.rhcloud.com/question-rest/rest//questions/getFirstQuestion/"+memberId+"/inputFile";
@@ -206,7 +213,7 @@ public class QuestionActivity extends ActionBarActivity {
 
 
 
-                if(parent.equalsIgnoreCase("QUIZ") || parent.equalsIgnoreCase("QUIZLISTEN")){
+                if(parent.equalsIgnoreCase("QUIZ") || parent.equalsIgnoreCase("QUIZLISTEN")|| parent.equalsIgnoreCase("FLASHCARD")){
                     jsonArray = new JSONArray(firstResponse);
                     mainObject = new JSONObject();
                     mainObject.put("datas",jsonArray);
@@ -218,7 +225,7 @@ public class QuestionActivity extends ActionBarActivity {
                  */
                 HashMap map  =  HelperService.jsonToMap(mainObject);
 
-                if(parent.equalsIgnoreCase("QUIZLISTEN")){
+                if(parent.equalsIgnoreCase("QUIZLISTEN") || parent.equalsIgnoreCase("FLASHCARD")){
                     List allQuestionDetails = (List) map.get("datas");
                     Map singleQuestionDetails = (Map) allQuestionDetails.get(0);
                     String MEMBER_NUMBER = singleQuestionDetails.get("memberNumber").toString();
@@ -285,7 +292,7 @@ public class QuestionActivity extends ActionBarActivity {
             HashMap map  =  HelperService.jsonToMap(mainObject);
 
             if(responseCode==201) {
-                Intent intent = new Intent(QuestionActivity.this, QuizListenActivity.class);
+                Intent intent = new Intent(QuestionActivity.this, FlashCardActivity.class);
                 intent.putExtra("dataMap", map);
                 startActivity(intent);
             }

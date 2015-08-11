@@ -130,6 +130,11 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
                 intentListen.putExtra("Activity", "quizlisten");
                 startActivity(intentListen);
                 break;
+            case R.id.flashCardToolMenu:
+                Intent flashCard = new Intent(WrongAnswerAvtivity.this, QuestionActivity.class);
+                flashCard.putExtra("Activity", "flashcard");
+                startActivity(flashCard);
+                break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(WrongAnswerAvtivity.this, AboutActivity.class);
                 startActivity(intent3);

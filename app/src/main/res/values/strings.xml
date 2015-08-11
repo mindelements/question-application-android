@@ -12,4 +12,5 @@
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_quiz_listen">QuizListenActivity</string>
     <string name="quizListenTitle"><u>Quiz questions and answers</u></string>
+    <string name="title_activity_flash_card">FlashCardActivity</string>
 </resources>

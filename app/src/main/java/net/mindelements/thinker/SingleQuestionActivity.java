@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,6 +33,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -135,6 +137,11 @@ public class SingleQuestionActivity extends ActionBarActivity {
                 Intent intentListen = new Intent(SingleQuestionActivity.this, QuestionActivity.class);
                 intentListen.putExtra("Activity", "quizlisten");
                 startActivity(intentListen);
+                break;
+            case R.id.flashCardToolMenu:
+                Intent flashCard = new Intent(SingleQuestionActivity.this, QuestionActivity.class);
+                flashCard.putExtra("Activity", "flashcard");
+                startActivity(flashCard);
                 break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(SingleQuestionActivity.this, AboutActivity.class);
@@ -300,20 +307,36 @@ public class SingleQuestionActivity extends ActionBarActivity {
         dialog.getWindow().setBackgroundDrawableResource(R.color.background_floating_material_dark);
         dialog.setContentView(R.layout.question_details);
         dialog.setTitle("Details");
-        /**
-         * Initialisation of variables
-         */
-        TextView questionNumberLabel = (TextView) dialog.findViewById(R.id.questionNumberLabel);
-        TextView questionSetTotalValueLabel = (TextView) dialog.findViewById(R.id.questionSetTotalValueLabel);
-        TextView totalQuestionLabel = (TextView) dialog.findViewById(R.id.totalQuestionLabel);
-        TextView numberOfSetsDoneLabel = (TextView) dialog.findViewById(R.id.numberOfSetsDoneLabel);
-        /**
-         * Set text to the labels initiated earlier
-         */
-        questionNumberLabel.setText("Question number : "+questionBucketDetails.get("questionNumber"));
-        questionSetTotalValueLabel.setText("Question set total value : "+questionBucketDetails.get("questionSetTotalValue"));
+
+        LinearLayout container = (LinearLayout) dialog.findViewById(R.id.container);
+
+        TextView questionNumberLabel = new TextView(this);
+        questionNumberLabel.setText("Question number : " + questionBucketDetails.get("questionNumber"));
+        questionNumberLabel.setTextColor(Color.WHITE);
+        questionNumberLabel.setTextSize(16);
+        questionNumberLabel.setPadding(10,0,0,0);
+        container.addView(questionNumberLabel,0);
+
+        TextView questionSetTotalValueLabel = new TextView(this);
+        questionSetTotalValueLabel.setText("Question set total value : " + questionBucketDetails.get("questionSetTotalValue"));
+        questionSetTotalValueLabel.setTextColor(Color.WHITE);
+        questionSetTotalValueLabel.setTextSize(16);
+        questionSetTotalValueLabel.setPadding(10,0,0,0);
+        container.addView(questionSetTotalValueLabel,1);
+
+        TextView totalQuestionLabel = new TextView(this);
         totalQuestionLabel.setText("Total question : " + questionBucketDetails.get("totalQuestion"));
+        totalQuestionLabel.setTextColor(Color.WHITE);
+        totalQuestionLabel.setTextSize(16);
+        totalQuestionLabel.setPadding(10,0,0,0);
+        container.addView(totalQuestionLabel,2);
+
+        TextView numberOfSetsDoneLabel = new TextView(this);
         numberOfSetsDoneLabel.setText("Number of sets done : " + questionBucketDetails.get("numberOfSetsDone"));
+        numberOfSetsDoneLabel.setTextColor(Color.WHITE);
+        numberOfSetsDoneLabel.setTextSize(16);
+        numberOfSetsDoneLabel.setPadding(10,0,0,0);
+        container.addView(numberOfSetsDoneLabel,3);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         dialogButton.setOnClickListener(new View.OnClickListener() {

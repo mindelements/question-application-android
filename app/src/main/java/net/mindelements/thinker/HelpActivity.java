@@ -76,6 +76,11 @@ public class HelpActivity extends ActionBarActivity {
                 intentListen.putExtra("Activity", "quizlisten");
                 startActivity(intentListen);
                 break;
+            case R.id.flashCardToolMenu:
+                Intent flashCard = new Intent(HelpActivity.this, QuestionActivity.class);
+                flashCard.putExtra("Activity", "flashcard");
+                startActivity(flashCard);
+                break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(HelpActivity.this, AboutActivity.class);
                 startActivity(intent3);

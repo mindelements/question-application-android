@@ -217,6 +217,11 @@ public class QuizListenActivity extends ActionBarActivity {
                 intent2.putExtra("Activity", "quiz");
                 startActivity(intent2);
                 break;
+            case R.id.flashCardToolMenu:
+                Intent flashCard = new Intent(QuizListenActivity.this, QuestionActivity.class);
+                flashCard.putExtra("Activity", "flashcard");
+                startActivity(flashCard);
+                break;
             case R.id.aboutMenu:
                 Intent intent3 = new Intent(QuizListenActivity.this, AboutActivity.class);
                 startActivity(intent3);
