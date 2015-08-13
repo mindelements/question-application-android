@@ -1,5 +1,6 @@
 package net.mindelements.thinker;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
@@ -292,7 +293,12 @@ public class QuestionActivity extends ActionBarActivity {
             HashMap map  =  HelperService.jsonToMap(mainObject);
 
             if(responseCode==201) {
-                Intent intent = new Intent(QuestionActivity.this, FlashCardActivity.class);
+                Intent intent = null;
+                if(parent.equalsIgnoreCase("FLASHCARD"))
+                    intent = new Intent(QuestionActivity.this, FlashCardActivity.class);
+                else
+                    intent = new Intent(QuestionActivity.this, QuizListenActivity.class);
+
                 intent.putExtra("dataMap", map);
                 startActivity(intent);
             }

@@ -1,29 +1,29 @@
 package net.mindelements.thinker;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -31,13 +31,10 @@ public class FlashCardActivity extends ActionBarActivity {
 
     public static Map<String,String> SELECTION;
     List quizResultList;
+    TextToSpeech speaker;
 
     String QUESTION_TYPE = "";
-    String QUESTION_STATUS = "";
-    String SESSION_ID = "";
-    String MEMBER_ID = "";
     String ANSWER = "";
-    String QUESTION_NUMBER = "";
     String QUESTION = "";
     int QUESTION_COUNTER = 0;
 
@@ -49,7 +46,6 @@ public class FlashCardActivity extends ActionBarActivity {
     Button rightButton;
     Button wrongButton;
     Button scoreButton;
-    Button endButton;
     Map<Button,Boolean> changingButtons = new HashMap<>();
 
     @Override
@@ -60,6 +56,19 @@ public class FlashCardActivity extends ActionBarActivity {
         actionBar.show();
         actionBar.setTitle("Flash Card");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+
+        /**
+         * Initialise TextToSpeech instance
+         */
+        speaker=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    speaker.setLanguage(Locale.UK);
+                }
+            }
+        });
 
         /**
          * Get map of data from parent activity
@@ -89,10 +98,15 @@ public class FlashCardActivity extends ActionBarActivity {
          * Disable Right, Wrong and Score button at the beginning
          */
         changingButtons.put(rightButton, false);
-        changingButtons.put(wrongButton,false);
-        changingButtons.put(scoreButton,false);
+        changingButtons.put(wrongButton, false);
+        changingButtons.put(scoreButton, false);
 
         changeButtonState(changingButtons);
+        List<String> textToSpeakList = new ArrayList<String>();
+        textToSpeakList.add("speak");
+        textToSpeakList.add("hello, how are you peter?");
+
+        new ServerRequestTask().execute(textToSpeakList.toArray(new String[textToSpeakList.size()]));
     }
     /**
      * For displaying radio button for question with single answer
@@ -111,20 +125,34 @@ public class FlashCardActivity extends ActionBarActivity {
         TextView questionLabel = new TextView(this);
         questionLabel.setText(QUESTION);
         questionLabel.setPadding(10, 0, 0, 0);
-        questionLabel.setTextSize(16);
+        questionLabel.setTextSize(18);
         questionLabel.setTextColor(Color.rgb(255, 255, 255));
+        questionLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         ll.addView(questionLabel);
 
-        int i=0;
-        for(Object key:SELECTION.keySet()){
-            i++;
-            RadioButton rdbtn = new RadioButton(this);
-            rdbtn.setId((1 * 2) + i);
-            rdbtn.setText(SELECTION.get(key.toString()).toString());
-            rdbtn.setTextColor(Color.WHITE);
-            rg.addView(rdbtn);
-        }
-        ll.addView(rg);
+        Button button = new Button(this);
+        button.setText("Play");
+        button.setWidth(50);
+        button.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ServerRequestTask().execute(QUESTION);
+            }
+        });
+        ll.addView(button);
+
+//
+//        int i=0;
+//        for(Object key:SELECTION.keySet()){
+//            i++;
+//            RadioButton rdbtn = new RadioButton(this);
+//            rdbtn.setId((1 * 2) + i);
+//            rdbtn.setText(SELECTION.get(key.toString()).toString());
+//            rdbtn.setTextColor(Color.WHITE);
+//            rg.addView(rdbtn);
+//        }
+//        ll.addView(rg);
         ll2.addView(sv);
 
     }
@@ -142,18 +170,31 @@ public class FlashCardActivity extends ActionBarActivity {
         TextView questionLabel = new TextView(this);
         questionLabel.setText(QUESTION);
         questionLabel.setPadding(10, 0, 0, 0);
-        questionLabel.setTextSize(16);
-        questionLabel.setTextColor(Color.rgb(255,255,255));
+        questionLabel.setTextSize(18);
+        questionLabel.setTextColor(Color.rgb(255, 255, 255));
+        questionLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         ll.addView(questionLabel);
-        int i=0;
-        for(Object key:SELECTION.keySet()) {
-            i++;
-            CheckBox cb = new CheckBox(this);
-            cb.setText(SELECTION.get(key.toString()).toString());
-            cb.setTextColor(Color.WHITE);
-            cb.setId(i + 6);
-            ll.addView(cb);
-        }
+
+        Button button = new Button(this);
+        button.setText("Play");
+        button.setWidth(50);
+        button.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ServerRequestTask().execute(QUESTION);
+            }
+        });
+        ll.addView(button);
+//        int i=0;
+//        for(Object key:SELECTION.keySet()) {
+//            i++;
+//            CheckBox cb = new CheckBox(this);
+//            cb.setText(SELECTION.get(key.toString()).toString());
+//            cb.setTextColor(Color.WHITE);
+//            cb.setId(i + 6);
+//            ll.addView(cb);
+//        }
         ll2.addView(sv);
     }
 
@@ -178,7 +219,7 @@ public class FlashCardActivity extends ActionBarActivity {
         /**
          * Get actual answer from answer code
          */
-        StringBuilder actualAnswer = new StringBuilder();
+        final StringBuilder actualAnswer = new StringBuilder();
         String[] answers = ANSWER.split(",");
         if(answers.length>1){
             actualAnswer.append("The answers are \n");
@@ -186,7 +227,7 @@ public class FlashCardActivity extends ActionBarActivity {
                 actualAnswer.append(SELECTION.get(code)+" \n");
             }
         }else{
-            actualAnswer.append("The answers is "+SELECTION.get(answers[0]));
+            actualAnswer.append("The answer is "+SELECTION.get(answers[0]));
         }
         ScrollView sv = new ScrollView(this);
         LinearLayout ll = new LinearLayout(this);
@@ -194,9 +235,21 @@ public class FlashCardActivity extends ActionBarActivity {
         TextView answerLabel = new TextView(this);
         answerLabel.setText(actualAnswer.toString());
         answerLabel.setPadding(10, 0, 0, 0);
-        answerLabel.setTextSize(16);
+        answerLabel.setTextSize(18);
         answerLabel.setTextColor(Color.rgb(255, 255, 255));
+        answerLabel.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         ll.addView(answerLabel);
+        Button button = new Button(this);
+        button.setText("Play");
+        button.setWidth(50);
+        button.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ServerRequestTask().execute(actualAnswer.toString());
+            }
+        });
+        ll.addView(button);
         sv.addView(ll);
 
         mainContentPane.addView(sv);
@@ -206,7 +259,7 @@ public class FlashCardActivity extends ActionBarActivity {
          */
         changingButtons.clear();
         changingButtons.put(rightButton, true);
-        changingButtons.put(wrongButton,true);
+        changingButtons.put(wrongButton, true);
         changingButtons.put(scoreButton, true);
         changingButtons.put(showButton, false);
 
@@ -253,6 +306,7 @@ public class FlashCardActivity extends ActionBarActivity {
         changingButtons.put(wrongButton, false);
 
         changeButtonState(changingButtons);
+
     }
 
     public void showDoneDialog(final boolean isFinished){
@@ -307,6 +361,7 @@ public class FlashCardActivity extends ActionBarActivity {
     }
 
     public void endFlashCardTool(View v){
+        speaker.shutdown();
         Intent intent = new Intent(FlashCardActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -364,5 +419,53 @@ public class FlashCardActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+    public class ServerRequestTask extends AsyncTask<String, Void, String> {
+        /**
+         *
+         * Other constructor can be added here along with the activity
+         */
+        public ServerRequestTask() {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String invokingMethod = params[0];
+            String returnValue = "";
+            /**
+             * ArraySize is added to last index of params to make number of
+             * String value to be spoken dynamic
+             */
+//            int arraySize = Integer.valueOf(params[params.length-1]);
+
+//            switch (invokingMethod) {
+//                case "speak":
+//                    for(int i=1 ; i<=1 ;i++){
+//                        System.out.println("i = speaking "+params[i]);
+//                        speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
+//                        if(i==3){
+//                            speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
+//                        }else{
+//                            speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
+//                        }
+//                    }
+//                    break;
+//                default:
+//                    break;
+//            }
+            speaker.speak(params[0], TextToSpeech.QUEUE_ADD, null);
+            return returnValue;
+        }
+
+        protected void onPostExecute(String params) {
+            super.onPostExecute(params);
+        }
+
     }
 }
