@@ -312,7 +312,7 @@ public class FlashCardActivity extends ActionBarActivity {
     public void showDoneDialog(final boolean isFinished){
 
         final Dialog dialog = new Dialog(this);
-        dialog.getWindow().setBackgroundDrawableResource(R.color.background_floating_material_dark);
+//        dialog.getWindow().setBackgroundDrawableResource(R.color.background_floating_material_dark);
         dialog.setContentView(R.layout.question_details);
         dialog.setTitle(isFinished?"Done! Upload another":"Scores");
 
@@ -327,13 +327,12 @@ public class FlashCardActivity extends ActionBarActivity {
 
         sb.append("Correct Answer(s): "+RIGHT_ANSWER_COUNTER+"\n");
         sb.append("Incorrect Answer(s): "+WRONG_ANSWER_COUNTER+"\n");
-        sb.append("Unanswered: "+UNANSWERED_COUNTER+"\n");
+        sb.append("Unanswered: "+(quizResultList.size()-RIGHT_ANSWER_COUNTER-WRONG_ANSWER_COUNTER)+"\n");
         sb.append("Total: "+total+"\n");
         sb.append("Percentage: "+rightPercentage+"%\n");
 
         TextView questionNumberLabel = new TextView(this);
         questionNumberLabel.setText(sb.toString());
-        questionNumberLabel.setTextColor(Color.WHITE);
         questionNumberLabel.setTextSize(16);
         questionNumberLabel.setPadding(10, 0, 0, 0);
         container.addView(questionNumberLabel, 0);
@@ -438,27 +437,6 @@ public class FlashCardActivity extends ActionBarActivity {
         protected String doInBackground(String... params) {
             String invokingMethod = params[0];
             String returnValue = "";
-            /**
-             * ArraySize is added to last index of params to make number of
-             * String value to be spoken dynamic
-             */
-//            int arraySize = Integer.valueOf(params[params.length-1]);
-
-//            switch (invokingMethod) {
-//                case "speak":
-//                    for(int i=1 ; i<=1 ;i++){
-//                        System.out.println("i = speaking "+params[i]);
-//                        speaker.speak(params[i], TextToSpeech.QUEUE_ADD, null);
-//                        if(i==3){
-//                            speaker.playSilence(1500, TextToSpeech.QUEUE_ADD, null);
-//                        }else{
-//                            speaker.playSilence(500, TextToSpeech.QUEUE_ADD, null);
-//                        }
-//                    }
-//                    break;
-//                default:
-//                    break;
-//            }
             speaker.speak(params[0], TextToSpeech.QUEUE_ADD, null);
             return returnValue;
         }
