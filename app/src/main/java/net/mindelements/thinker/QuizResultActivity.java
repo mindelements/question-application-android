@@ -57,7 +57,7 @@ public class QuizResultActivity extends ActionBarActivity {
             for (Map.Entry<String, String> entry : selection.entrySet()) {
                 countOption++;
                 optionBuilder.append(entry.getKey() + " : " + entry.getValue());
-                if(countOption<4)
+//                if(countOption<4)
                     optionBuilder.append("\n");
             }
 
@@ -66,7 +66,7 @@ public class QuizResultActivity extends ActionBarActivity {
             String memberAnswer = "Your answer : "+quizResult.get("memberAnswer").toString();
 
             String correct = "Correct : false";
-            if(quizResult.keySet().contains("correct")){
+            if(quizResult.get("correct")==true){
                 correct = "Correct : "+quizResult.get("correct").toString();
                 totalCorrectAnswerCount++;
             }
