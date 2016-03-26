@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 
 import net.mindelements.thinker.R;
+import net.mindelements.thinker.utility.HelperService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class QuizResultActivity extends ActionBarActivity {
          * Get map of data from parent activity
          */
         Intent intent = getIntent();
-        HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
+        Map<String, Object> hashMap = HelperService.stringToMap(intent.getStringExtra("dataMap"));
         List quizResultList = (List) hashMap.get("datas");
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
         dataSize = quizResultList.size();
@@ -66,7 +67,7 @@ public class QuizResultActivity extends ActionBarActivity {
             String memberAnswer = "Your answer : "+quizResult.get("memberAnswer").toString();
 
             String correct = "Correct : false";
-            if(quizResult.get("correct")==true){
+            if( (boolean)quizResult.get("correct") == true ){
                 correct = "Correct : "+quizResult.get("correct").toString();
                 totalCorrectAnswerCount++;
             }

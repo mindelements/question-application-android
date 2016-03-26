@@ -59,11 +59,18 @@
         </activity>
         <activity
             android:name="net.mindelements.thinker.HelpActivity"
-            android:label="@string/title_activity_help" >
+            android:label="@string/title_activity_help"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="net.mindelements.thinker.QuizListenActivity"
-            android:label="@string/title_activity_quiz_listen" >
+            android:label="@string/title_activity_quiz_listen"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="net.mindelements.thinker.FlashCardActivity"
+            android:label="@string/title_activity_flash_card"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

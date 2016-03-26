@@ -206,7 +206,7 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
 
         Intent myIntent = new Intent(getApplicationContext(), WrongAnswerAvtivity.class);
         REVIEW_MAP.put("memberId", MEMBER_ID);
-        myIntent.putExtra("dataMap", REVIEW_MAP);
+        myIntent.putExtra("dataMap", HelperService.maptoString(REVIEW_MAP));
         startActivityForResult(myIntent, 0);
     }
 
@@ -240,7 +240,7 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
                 QUESTION_STATUS = map.get("status").toString();
                 map.put("memberId", MEMBER_ID);
                 Intent intent = new Intent(WrongAnswerAvtivity.this, SingleQuestionActivity.class);
-                intent.putExtra("dataMap", map);
+                intent.putExtra("dataMap", HelperService.maptoString(map));
                 startActivity(intent);
             }
         } catch (Exception ex) {

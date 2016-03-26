@@ -9,6 +9,8 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/quizLIstenToolMenu" android:title="Quiz Listen Tool"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/flashCardToolMenu" android:title="Flash Card Tool"
+        android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/aboutMenu" android:title="About"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/helpMenu" android:title="Help"
@@ -16,4 +18,4 @@
     <item android:id="@+id/quitMenu" android:title="Quit"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>
-<!-- From: file:/C:/mobileapps/suresh/question-tool-v5/question-application-android/app/src/main/res/menu/menu_main.xml -->
+<!-- From: file:/C:/mobileapps/question-application-android-master/app/src/main/res/menu/menu_main.xml -->

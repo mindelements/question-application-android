@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 
 import net.mindelements.thinker.R;
+import net.mindelements.thinker.utility.HelperService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,15 +69,15 @@ public class QuizListenActivity extends ActionBarActivity {
          * Get map of data from parent activity
          */
         Intent intent = getIntent();
-        HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
+        Map<String, Object> hashMap = HelperService.stringToMap(intent.getStringExtra("dataMap"));
         List quizResultList = (List) hashMap.get("datas");
         tempQuizResultList = quizResultList;
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
         dataSize = quizResultList.size();
 
-        Collections.sort(quizResultList, new Comparator<Map<String, Integer>>() {
+        Collections.sort(quizResultList, new Comparator<Map<String, Double>>() {
             @Override
-            public int compare(Map<String, Integer> o1, Map<String, Integer> o2) {
+            public int compare(Map<String, Double> o1, Map<String, Double> o2) {
                 return o1.get("questionNumber").compareTo(o2.get("questionNumber"));
             }
         });
@@ -91,7 +92,7 @@ public class QuizListenActivity extends ActionBarActivity {
              * Add speak in 1st determine speak case
              */
             textToSpeakList.add("speak");
-            final String speechQuestion = "Question number "+(quizResult.get("questionNumber").toString())+" , "+quizResult.get("question").toString();
+            final String speechQuestion = "Question number "+(quizResult.get("questionNumber").toString().replace(",0",""))+" , "+quizResult.get("question").toString();
             /**
              * Add question secondly
              */
@@ -253,9 +254,9 @@ public class QuizListenActivity extends ActionBarActivity {
     public void playAllQuestionAnswers(View v){
 
         int k = 0;
-        Collections.sort(tempQuizResultList, new Comparator<Map<String, Integer>>() {
+        Collections.sort(tempQuizResultList, new Comparator<Map<String, Double>>() {
             @Override
-            public int compare(Map<String, Integer> o1, Map<String, Integer> o2) {
+            public int compare(Map<String, Double> o1, Map<String, Double> o2) {
                 return o1.get("questionNumber").compareTo(o2.get("questionNumber"));
             }
         });
@@ -270,7 +271,7 @@ public class QuizListenActivity extends ActionBarActivity {
              * Add speak in 1st determine speak case
              */
             textToSpeakList.add("speak");
-            final String speechQuestion = "Question number "+quizResult.get("questionNumber")+" , "+quizResult.get("question").toString();
+            final String speechQuestion = "Question number "+quizResult.get("questionNumber").toString().replace(".0","")+" , "+quizResult.get("question").toString();
             /**
              * Add question secondly
              */

@@ -1,5 +1,7 @@
 package net.mindelements.thinker.utility;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,12 +10,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Suresh on 6/28/2015.
  */
 public class HelperService {
 
+    public static Map<String, Object> stringToMap(String input) {
+        Map<String,Object> hashMap = new HashMap<String, Object>();
+        return (Map<String,Object>) new Gson().fromJson(input, hashMap.getClass());
+    }
+
+    public static String maptoString(HashMap<String, Object> map) {
+        return new Gson().toJson(map);
+    }
     public static HashMap<String, Object> jsonToMap(JSONObject json) throws JSONException {
         HashMap<String, Object> retMap = new HashMap<String, Object>();
 

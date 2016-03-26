@@ -3,6 +3,7 @@ package net.mindelements.thinker;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.gson.Gson;
 
 import net.mindelements.thinker.utility.HelperService;
 import net.mindelements.thinker.utility.ServerRequestTask;
@@ -34,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -224,7 +228,7 @@ public class QuestionActivity extends ActionBarActivity {
                 /**
                  * Converts JSONObject to Map
                  */
-                HashMap map  =  HelperService.jsonToMap(mainObject);
+                HashMap<String, Object> map  =  HelperService.jsonToMap(mainObject);
 
                 if(parent.equalsIgnoreCase("QUIZLISTEN") || parent.equalsIgnoreCase("FLASHCARD")){
                     List allQuestionDetails = (List) map.get("datas");
@@ -235,22 +239,19 @@ public class QuestionActivity extends ActionBarActivity {
                     return;
                 }
 
-
-
                 if(responseCode==201){
 
                     if(parent.equalsIgnoreCase("QUIZ")){
                         map.put("memberId",memberId);
                         Intent intent = new Intent(QuestionActivity.this, QuizActivity.class);
-                        intent.putExtra("dataMap", map);
+                        intent.putExtra("dataMap", HelperService.maptoString(map));
                         startActivity(intent);
                     }else{
-                        map.put("memberId",memberId);
+                        map.put("memberId", memberId);
                         Intent intent = new Intent(QuestionActivity.this, SingleQuestionActivity.class);
-                        intent.putExtra("dataMap", map);
+                        intent.putExtra("dataMap", HelperService.maptoString(map));
                         startActivity(intent);
                     }
-
                 }
 
             } catch (Exception ex) {
@@ -290,7 +291,7 @@ public class QuestionActivity extends ActionBarActivity {
             /**
              * Converts JSONObject to Map
              */
-            HashMap map  =  HelperService.jsonToMap(mainObject);
+            HashMap<String, Object> map  =  HelperService.jsonToMap(mainObject);
 
             if(responseCode==201) {
                 Intent intent = null;
@@ -299,7 +300,7 @@ public class QuestionActivity extends ActionBarActivity {
                 else
                     intent = new Intent(QuestionActivity.this, QuizListenActivity.class);
 
-                intent.putExtra("dataMap", map);
+                intent.putExtra("dataMap", HelperService.maptoString(map));
                 startActivity(intent);
             }
         } catch (Exception ex) {

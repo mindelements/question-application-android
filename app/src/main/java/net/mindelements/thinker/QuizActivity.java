@@ -68,7 +68,7 @@ public class QuizActivity extends ActionBarActivity {
          * Get map of data from parent activity
          */
         Intent intent = getIntent();
-        HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
+        Map<String, Object> hashMap = HelperService.stringToMap(intent.getStringExtra("dataMap"));
         List allQuestionDetails = (List) hashMap.get("datas");
         tableLayout = (TableLayout) findViewById(R.id.mainTable);
         dataSize = allQuestionDetails.size();
@@ -266,7 +266,7 @@ public class QuizActivity extends ActionBarActivity {
     }
 
     public void uploadAnswerInBackground(String questionNumber){
-        String requestURL = "https://qa1-mindelements.rhcloud.com/question-web/app/quiz/save/"+questionNumber+"/"+ANSWER+"/"+MEMBER_NUMBER+"/"+SESSION_ID;
+        String requestURL = "https://qa1-mindelements.rhcloud.com/question-web/app/quiz/save/"+questionNumber.replace(".0","")+"/"+ANSWER+"/"+MEMBER_NUMBER+"/"+SESSION_ID;
         Log.d(getClass().getName(), "Uploading answer to server------------->>URL : " + requestURL);
         try{
 
@@ -334,7 +334,7 @@ public class QuizActivity extends ActionBarActivity {
 
             if(responseCode==201) {
                 Intent intent = new Intent(QuizActivity.this, QuizResultActivity.class);
-                intent.putExtra("dataMap", map);
+                intent.putExtra("dataMap", HelperService.maptoString(map));
                 startActivity(intent);
             }
         } catch (Exception ex) {

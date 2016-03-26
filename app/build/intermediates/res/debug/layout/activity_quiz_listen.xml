@@ -8,7 +8,7 @@
     tools:context="net.mindelements.thinker.QuizResultActivity">
 
 
-    <TextView android:text="@string/quizListenTitle"
+    <TextView android:text="Quiz Listen Tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -23,7 +23,8 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/aboutLabel"
         android:id="@+id/quizScrollView"
-        android:layout_above="@+id/footer">
+        android:fillViewport="false"
+        android:layout_above="@+id/playAllButton">
         <TableLayout
             android:id="@+id/mainTable"
             android:layout_width="fill_parent"
@@ -35,6 +36,29 @@
 
 
     </ScrollView>
+
+    <Button android:id="@+id/playAllButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Play All"
+        android:minWidth="150dp"
+        android:onClick="playAllQuestionAnswers"
+        android:textAllCaps="false"
+        android:layout_alignTop="@+id/stopAllButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp" />
+    <Button android:id="@+id/stopAllButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Stop"
+        android:minWidth="150dp"
+        android:onClick="stopPlaying"
+        android:textAllCaps="false"
+        android:layout_above="@+id/footer"
+        android:layout_toRightOf="@+id/playAllButton"
+        android:layout_toEndOf="@+id/playAllButton" />
 
     <RelativeLayout
         android:id="@+id/footer"
@@ -60,4 +84,4 @@
 
 
 </RelativeLayout>
-<!-- From: file:/C:/mobileapps/suresh/question-tool-v5/question-application-android/app/src/main/res/layout/activity_quiz_listen.xml -->
+<!-- From: file:/C:/mobileapps/question-application-android-master/app/src/main/res/layout/activity_quiz_listen.xml -->

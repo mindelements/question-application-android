@@ -23,6 +23,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 
+import com.google.gson.Gson;
+
 import net.mindelements.thinker.utility.HelperService;
 import net.mindelements.thinker.R;
 import net.mindelements.thinker.utility.ServerRequestTask;
@@ -32,6 +34,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -71,8 +74,10 @@ public class SingleQuestionActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
-        questionBucketDetails = (Map) hashMap.get("questionBucketDetails");
+
+        Map<String,Object> hashMap = HelperService.stringToMap(intent.getStringExtra("dataMap"));
+
+        questionBucketDetails = (Map<String,Object>)hashMap.get("questionBucketDetails");
 
         Log.d(getClass().getName(), "Data Map inside SingleQuestionActivity------>>"+hashMap);
 
@@ -394,7 +399,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
 
         Intent myIntent = new Intent(getApplicationContext(), WrongAnswerAvtivity.class);
         REVIEW_MAP.put("memberId",MEMBER_ID);
-        myIntent.putExtra("dataMap", REVIEW_MAP);
+        myIntent.putExtra("dataMap", HelperService.maptoString(REVIEW_MAP));
         startActivityForResult(myIntent, 0);
     }
 
@@ -440,7 +445,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
                 QUESTION_STATUS = map.get("status").toString();
                 map.put("memberId", MEMBER_ID);
                 Intent intent = new Intent(SingleQuestionActivity.this, SingleQuestionActivity.class);
-                intent.putExtra("dataMap", map);
+                intent.putExtra("dataMap", HelperService.maptoString(map));
                 startActivity(intent);
             }
         } catch (Exception ex) {
@@ -480,7 +485,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
          */
         Log.d(getClass().getName(),"ANSWER -------------->> "+ANSWER);
         if(ANSWER=="")return;
-        String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/checkAnswer/"+ANSWER+"/"+MEMBER_ID+"/"+SESSION_ID+"/"+QUESTION_NUMBER;
+        String requestURL = "https://portal-mindelements.rhcloud.com:443/question-rest/rest//questions/checkAnswer/"+ANSWER+"/"+MEMBER_ID+"/"+SESSION_ID+"/"+QUESTION_NUMBER.replace(".0","");
         try{
 
             HttpClient httpclient = new DefaultHttpClient();

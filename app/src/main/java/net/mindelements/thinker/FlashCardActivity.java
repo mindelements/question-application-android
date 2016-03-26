@@ -20,6 +20,8 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import net.mindelements.thinker.utility.HelperService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +76,7 @@ public class FlashCardActivity extends ActionBarActivity {
          * Get map of data from parent activity
          */
         Intent intent = getIntent();
-        HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
+        Map<String, Object> hashMap = HelperService.stringToMap(intent.getStringExtra("dataMap"));
         quizResultList = (List) hashMap.get("datas");
 
         Map singleMap = (Map)quizResultList.get(QUESTION_COUNTER);

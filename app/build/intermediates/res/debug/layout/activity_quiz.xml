@@ -8,7 +8,7 @@
     tools:context="net.mindelements.thinker.QuizActivity"
     android:id="@+id/quizView">
 
-    <TextView android:text="Questions"
+    <TextView android:text="Quiz Tool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
@@ -17,23 +17,17 @@
         android:id="@+id/aboutLabel"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:paddingTop="10dp"
+        android:id="@+id/linearLayout2"
         android:layout_below="@+id/aboutLabel"
-        android:layout_above="@+id/submitAll"
-        android:id="@+id/quizScrollView">
-        <TableLayout
-            android:id="@+id/mainTable"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:stretchColumns="1"
-            >
-            <!-- everything you already have -->
-        </TableLayout>
-
-
-    </ScrollView>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/submitAll"></LinearLayout>
     <Button android:id="@+id/submitAll"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -67,4 +61,4 @@
 
 
 </RelativeLayout>
-<!-- From: file:/C:/mobileapps/suresh/question-tool-v5/question-application-android/app/src/main/res/layout/activity_quiz.xml -->
+<!-- From: file:/C:/mobileapps/question-application-android-master/app/src/main/res/layout/activity_quiz.xml -->
