@@ -11,12 +11,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Suresh on 6/28/2015.
  */
 public class HelperService {
 
+    public static int randInt(int min, int max) {
+
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
+    }
     public static Map<String, Object> stringToMap(String input) {
         Map<String,Object> hashMap = new HashMap<String, Object>();
         return (Map<String,Object>) new Gson().fromJson(input, hashMap.getClass());

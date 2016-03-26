@@ -58,6 +58,9 @@ public class QuestionActivity extends ActionBarActivity {
         actionBar.setTitle("Question");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        EditText ed1 = (EditText) findViewById(R.id.memberIdField);
+        ed1.setText(String.valueOf(HelperService.randInt(1000, 9999)));
+
         String root = getIntent().getStringExtra("Activity");
         if(getIntent().getExtras() != null){
             if(root.equalsIgnoreCase("quiz"))
@@ -69,6 +72,8 @@ public class QuestionActivity extends ActionBarActivity {
 
             TextView tv = (TextView) findViewById(R.id.textView4);
             tv.setText("Message : Practice question tool");
+
+
         }
 
     }

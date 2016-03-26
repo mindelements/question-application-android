@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -72,6 +73,7 @@ public class SingleQuestionActivity extends ActionBarActivity {
         actionBar.show();
         actionBar.setTitle("Question Details");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         Intent intent = getIntent();
 
