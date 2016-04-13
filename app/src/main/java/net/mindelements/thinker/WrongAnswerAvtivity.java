@@ -61,7 +61,7 @@ public class WrongAnswerAvtivity extends ActionBarActivity {
 
 
         Intent intent = getIntent();
-        HashMap<String, Object> hashMap = (HashMap<String, Object>) intent.getSerializableExtra("dataMap");
+        Map<String, Object> hashMap = HelperService.stringToMap(intent.getStringExtra("dataMap"));
 
         Log.d(getClass().getName(), "Data Map inside WrongAnswerActivity------>>"+hashMap);
 

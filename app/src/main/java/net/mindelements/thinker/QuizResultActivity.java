@@ -67,7 +67,7 @@ public class QuizResultActivity extends ActionBarActivity {
             String memberAnswer = "Your answer : "+quizResult.get("memberAnswer").toString();
 
             String correct = "Correct : false";
-            if( (boolean)quizResult.get("correct") == true ){
+            if( quizResult.get("correct") != null && (boolean)quizResult.get("correct") == true ){
                 correct = "Correct : "+quizResult.get("correct").toString();
                 totalCorrectAnswerCount++;
             }

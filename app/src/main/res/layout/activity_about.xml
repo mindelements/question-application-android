@@ -7,7 +7,7 @@
     android:background="@drawable/bg_image"
     tools:context="net.mindelements.thinker.AboutActivity">
 
-    <TextView android:text="Version 1.0 (C) MindElements Thinker"
+    <TextView android:text="Version 2.0 (C) MindElements Thinker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
