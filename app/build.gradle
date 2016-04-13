@@ -8,8 +8,8 @@ android {
         applicationId "net.mindelements.thinker"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 72420151
-        versionName "1.0"
+        versionCode 72420500
+        versionName "2.0"
     }
     buildTypes {
         release {
